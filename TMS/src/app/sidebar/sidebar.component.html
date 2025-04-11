@@ -90,33 +90,69 @@
             </li>
           </ul>
         </li>
+
+        <li class="nav-item">
+          <div class="nav-link" (click)="toggleClassesSubmenu()">
+            <i class="bi bi-people icon"></i>
+            <span class="nav-text">{{ getTranslation("class") }}</span>
+            <i
+              class="bi bi-chevron-down arrow"
+              [ngClass]="{ rotate: isClassOpen }"
+            ></i>
+          </div>
+          <ul class="submenu" [ngClass]="{ active: isClassOpen }">
+            <li class="sub-item">
+              <div
+                class="sub-link"
+                routerLink="/addclass"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-person-plus sub-icon"></i>
+                <span class="sub-text">{{
+                  getTranslation("add_new_class")
+                }}</span>
+              </div>
+            </li>
+            <li class="sub-item">
+              <div
+                class="sub-link"
+                routerLink="/allclasses"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-list-ul sub-icon"></i>
+                <span class="sub-text">{{
+                  getTranslation("all_classes")
+                }}</span>
+              </div>
+            </li>
+          </ul>
+        </li>
       </ul>
     </nav>
 
-    <div class="language-toggle-container">
-      <div class="language-label">
-        <i class="bi bi-globe icon"></i>
-        <span class="language-text">{{ getTranslation("language") }}</span>
-      </div>
-      <div class="language-toggle-btn">
-        <button
-          class="lang-btn"
-          [ngClass]="{ active: languageService.getLanguage() === 'english' }"
-          (click)="setLanguage('english')"
-        >
-          English
-        </button>
-        <button
-          class="lang-btn"
-          [ngClass]="{ active: languageService.getLanguage() === 'sinhala' }"
-          (click)="setLanguage('sinhala')"
-        >
-          Sinhala
-        </button>
-      </div>
-    </div>
-
     <div class="logout-container">
+      <div class="language-toggle-container">
+        <div class="language-label">
+          <i class="bi bi-globe icon"></i>
+          <span class="language-text">{{ getTranslation("language") }}</span>
+        </div>
+        <div class="language-toggle-btn">
+          <button
+            class="lang-btn"
+            [ngClass]="{ active: languageService.getLanguage() === 'english' }"
+            (click)="setLanguage('english')"
+          >
+            English
+          </button>
+          <button
+            class="lang-btn"
+            [ngClass]="{ active: languageService.getLanguage() === 'sinhala' }"
+            (click)="setLanguage('sinhala')"
+          >
+            Sinhala
+          </button>
+        </div>
+      </div>
       <button class="logout-btn">{{ getTranslation("logout") }}</button>
     </div>
   </div>

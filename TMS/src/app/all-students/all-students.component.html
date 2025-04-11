@@ -1,1 +1,53 @@
-<p>all-students works!</p>
+<div class="content-area">
+  <div class="container mt-4">
+    <h2 class="text-center mb-4 animate-title">
+      {{ getTranslation("all_students") }}
+    </h2>
+    <div class="table-responsive animate-table">
+      <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>{{ getTranslation("student_id") }}</th>
+            <th>{{ getTranslation("first_name") }}</th>
+            <th>{{ getTranslation("last_name") }}</th>
+            <th>{{ getTranslation("date_of_birth") }}</th>
+            <th>{{ getTranslation("gender") }}</th>
+            <th>{{ getTranslation("contact_number") }}</th>
+            <th>{{ getTranslation("email") }}</th>
+            <th>{{ getTranslation("address") }}</th>
+            <th>{{ getTranslation("admission_date") }}</th>
+            <th>{{ getTranslation("actions") }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of students" class="animate-row">
+            <td>{{ student.StudentID }}</td>
+            <td>{{ student.firstName }}</td>
+            <td>{{ student.lastName }}</td>
+            <td>{{ student.dateOfBirth }}</td>
+            <td>{{ student.gender }}</td>
+            <td>{{ student.contactNumber }}</td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.address }}</td>
+            <td>{{ student.enrollmentDate }}</td>
+            <td>
+              <button
+                class="btn btn-sm btn-primary me-2 animate-button"
+                (click)="editStudent(student)"
+                title="{{ getTranslation('edit') }}"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-danger animate-button"
+                title="{{ getTranslation('delete') }}"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

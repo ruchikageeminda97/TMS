@@ -1,0 +1,288 @@
+<div class="content-area">
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-center animate-title mb-0">
+        {{ getTranslation("add_new_class") }}
+      </h2>
+      <!-- Uncomment if you want an import button -->
+      <!-- <button class="btn btn-primary animate-button import-btn" (click)="openImportModal()">
+          <i class="bi bi-upload me-2"></i> {{ getTranslation('import_class_list') }}
+        </button> -->
+    </div>
+    <form
+      #classForm="ngForm"
+      (ngSubmit)="onSubmit(classForm)"
+      class="p-4 bg-white rounded shadow animate-form"
+    >
+      <div class="row">
+        <!-- Class Name -->
+        <div class="col-md-6 mb-3">
+          <label for="className" class="form-label">{{
+            getTranslation("class_name")
+          }}</label>
+          <input
+            type="text"
+            id="className"
+            name="className"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_class_name')"
+            [(ngModel)]="class.className"
+            required
+            pattern="[A-Za-z0-9\s]+"
+          />
+          <div
+            *ngIf="
+              classForm.controls['className']?.invalid &&
+              classForm.controls['className']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_class_name") }}
+          </div>
+        </div>
+
+        <!-- Teacher ID -->
+        <div class="col-md-6 mb-3">
+          <label for="teacherID" class="form-label">{{
+            getTranslation("teacher_id")
+          }}</label>
+          <input
+            type="text"
+            id="teacherID"
+            name="teacherID"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_teacher_id')"
+            [(ngModel)]="class.teacherID"
+            required
+            pattern="[A-Za-z0-9]+"
+          />
+          <div
+            *ngIf="
+              classForm.controls['teacherID']?.invalid &&
+              classForm.controls['teacherID']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_teacher_id") }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Teacher Name -->
+        <div class="col-md-6 mb-3">
+          <label for="teacherName" class="form-label">{{
+            getTranslation("teacher_name")
+          }}</label>
+          <input
+            type="text"
+            id="teacherName"
+            name="teacherName"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_teacher_name')"
+            [(ngModel)]="class.teacherName"
+            required
+            pattern="[A-Za-z\s]+"
+          />
+          <div
+            *ngIf="
+              classForm.controls['teacherName']?.invalid &&
+              classForm.controls['teacherName']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_teacher_name") }}
+          </div>
+        </div>
+
+        <!-- Subject -->
+        <div class="col-md-6 mb-3">
+          <label for="subject" class="form-label">{{
+            getTranslation("subject")
+          }}</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_subject')"
+            [(ngModel)]="class.subject"
+            required
+            pattern="[A-Za-z\s]+"
+          />
+          <div
+            *ngIf="
+              classForm.controls['subject']?.invalid &&
+              classForm.controls['subject']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_subject") }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Date -->
+        <div class="col-md-6 mb-3">
+          <label for="date" class="form-label">{{
+            getTranslation("date")
+          }}</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            class="form-control animate-input"
+            [(ngModel)]="class.date"
+            required
+          />
+          <div
+            *ngIf="
+              classForm.controls['date']?.invalid &&
+              classForm.controls['date']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_date") }}
+          </div>
+        </div>
+
+        <!-- Fee -->
+        <div class="col-md-6 mb-3">
+          <label for="fee" class="form-label">{{
+            getTranslation("fee")
+          }}</label>
+          <input
+            type="number"
+            id="fee"
+            name="fee"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_fee')"
+            [(ngModel)]="class.fee"
+            required
+            min="0"
+            step="0.01"
+          />
+          <div
+            *ngIf="
+              classForm.controls['fee']?.invalid &&
+              classForm.controls['fee']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_fee") }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Start Time -->
+        <div class="col-md-6 mb-3">
+          <label for="startTime" class="form-label">{{
+            getTranslation("start_time")
+          }}</label>
+          <input
+            type="time"
+            id="startTime"
+            name="startTime"
+            class="form-control animate-input"
+            [(ngModel)]="startTime"
+            required
+          />
+          <div
+            *ngIf="
+              classForm.controls['startTime']?.invalid &&
+              classForm.controls['startTime']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_start_time") }}
+          </div>
+        </div>
+
+        <!-- End Time -->
+        <div class="col-md-6 mb-3">
+          <label for="endTime" class="form-label">{{
+            getTranslation("end_time")
+          }}</label>
+          <input
+            type="time"
+            id="endTime"
+            name="endTime"
+            class="form-control animate-input"
+            [(ngModel)]="endTime"
+            required
+          />
+          <div
+            *ngIf="
+              classForm.controls['endTime']?.invalid &&
+              classForm.controls['endTime']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_end_time") }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button
+          type="submit"
+          class="btn btn-primary animate-button"
+          [disabled]="classForm.invalid"
+        >
+          {{ getTranslation("add_class") }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Optional Import Modal (Uncomment if needed) -->
+    <!-- <div class="custom-modal" *ngIf="isImportModalOpen">
+        <div class="modal-overlay" (click)="closeImportModal()"></div>
+        <div class="modal-content animate-modal">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="bi bi-file-earmark-arrow-up me-2"></i> {{ getTranslation('import_class_list') }}
+            </h5>
+            <button type="button" class="close-btn" (click)="closeImportModal()" aria-label="Close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div
+              class="drag-drop-area"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+              [ngClass]="{ 'drag-over': isDragging }"
+            >
+              <i class="bi bi-cloud-upload display-4 text-muted mb-3"></i>
+              <p class="mb-2">{{ getTranslation('drag_drop_csv') }}</p>
+              <input
+                type="file"
+                id="csvFile"
+                accept=".csv"
+                class="d-none"
+                (change)="onFileSelected($event)"
+              />
+              <label style="color: white" for="csvFile" class="btn btn-outline-primary animate-button">
+                <i class="bi bi-folder2-open me-2"></i> {{ getTranslation('choose_file') }}
+              </label>
+              <p *ngIf="selectedFile" class="mt-3 text-success">
+                <i class="bi bi-check-circle me-2"></i> {{ selectedFile.name }}
+              </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary animate-button" (click)="closeImportModal()">
+              <i class="bi bi-x-circle me-2"></i> {{ getTranslation('cancel') }}
+            </button>
+            <button type="button" class="btn btn-primary animate-button" (click)="importCsv()" [disabled]="!selectedFile">
+              <i class="bi bi-file-earmark-check me-2"></i> {{ getTranslation('import') }}
+            </button>
+          </div>
+        </div>
+      </div> -->
+  </div>
+</div>

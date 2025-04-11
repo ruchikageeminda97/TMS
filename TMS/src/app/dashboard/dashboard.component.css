@@ -26,23 +26,23 @@
   
   
   .card:nth-child(1) { 
-    background: linear-gradient(135deg, #0f3a57 0%, #4e4376 100%); 
+    background: linear-gradient(135deg, #639fe4 0%, #4797f1 100%); 
   }
   
   .card:nth-child(2) { 
-    background: linear-gradient(135deg, #033529 0%, #2e856e 100%); 
+    background: linear-gradient(135deg, #639fe4 0%, #4797f1 100%); 
   }
   
   .card:nth-child(3) { 
-    background: linear-gradient(135deg, #210257 0%, #772258 100%); 
+    background: linear-gradient(135deg, #639fe4 0%, #4797f1 100%); 
   }
   
   .card:nth-child(4) { 
-    background: linear-gradient(135deg, #ffa502 0%, #ff6f61 100%);
+    background: linear-gradient(135deg, #639fe4 0%, #4797f1 100%); 
   }
   
   .card:nth-child(5) { 
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #639fe4 0%, #4797f1 100%); 
   }
   
   .card-icon {
@@ -65,3 +65,5 @@
   .future-section {
     margin-top: 40px; 
   }
+
+  

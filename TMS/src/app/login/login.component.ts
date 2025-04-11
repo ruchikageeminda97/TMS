@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LanguageService } from '../language.service'; // Import service
+import { LanguageService } from '../language.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +14,7 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private router: Router, public languageService: LanguageService) {} // Inject service
+  constructor(private router: Router, public languageService: LanguageService) {} 
 
   getTranslation(key: string): string {
     return this.languageService.getTranslation(key);

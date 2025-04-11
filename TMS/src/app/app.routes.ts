@@ -6,6 +6,9 @@ import { AddStudentComponent } from './add-student/add-student.component';
 import { AllStudentsComponent } from './all-students/all-students.component';
 import { AddTeacherComponent } from './add-teacher/add-teacher.component';
 import { AllTeachersComponent } from './all-teachers/all-teachers.component';
+import { AddClassComponent } from './add-class/add-class.component';
+import { AllClassesComponent } from './all-classes/all-classes.component';
+import { StuEnrollComponent } from './stu-enroll/stu-enroll.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent }, 
@@ -24,9 +27,11 @@ export const routes: Routes = [
       { path: 'addteacher', component: AddTeacherComponent },
       { path: 'allteacher', component: AllTeachersComponent },
 
-       // teacher
-      //  { path: 'addteacher', component: AddTeacherComponent },
-      //  { path: 'allteacher', component: AllTeachersComponent },
+       // class
+      { path: 'addclass', component: AddClassComponent },
+      { path: 'allclasses', component: AllClassesComponent},
+      { path: 'stu_enroll', component: StuEnrollComponent},
+
 
 
 

@@ -1,0 +1,10 @@
+{
+    "sidebar": {
+      "dashboard": "ප්‍රධාන පුවරුව",
+      "students": "සිසුන්",
+      "add_student": "සිසුවෙකු එකතු කරන්න",
+      "all_students": "සියලුම සිසුන්",
+      "language": "භාෂාව",
+      "logout": "ඉවත් වන්න"
+    }
+  }

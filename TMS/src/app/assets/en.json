@@ -1,0 +1,10 @@
+{
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "students": "Students",
+      "add_student": "Add Student",
+      "all_students": "All Students",
+      "language": "Language",
+      "logout": "Logout"
+    }
+  }

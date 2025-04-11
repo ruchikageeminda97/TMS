@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LanguageService } from '../language.service'; 
+import { LanguageService } from '../language.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +9,6 @@ import { LanguageService } from '../language.service';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  
   studentCount: number = 150;
   teacherCount: number = 25;
   classCount: number = 40;
