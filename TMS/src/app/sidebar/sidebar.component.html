@@ -15,19 +15,18 @@
             routerLinkActive="active"
           >
             <i class="bi bi-speedometer2 icon"></i>
-            <span class="nav-text">Dashboard</span>
+            <span class="nav-text">{{ getTranslation("dashboard") }}</span>
           </div>
         </li>
         <li class="nav-item">
           <div class="nav-link" (click)="toggleStudentsSubmenu()">
             <i class="bi bi-people icon"></i>
-            <span class="nav-text">Students</span>
+            <span class="nav-text">{{ getTranslation("students") }}</span>
             <i
               class="bi bi-chevron-down arrow"
               [ngClass]="{ rotate: isStudentsOpen }"
             ></i>
           </div>
-          <!-- Submenu -->
           <ul class="submenu" [ngClass]="{ active: isStudentsOpen }">
             <li class="sub-item">
               <div
@@ -36,7 +35,9 @@
                 routerLinkActive="active"
               >
                 <i class="bi bi-person-plus sub-icon"></i>
-                <span class="sub-text">Add Student</span>
+                <span class="sub-text">{{
+                  getTranslation("add_student")
+                }}</span>
               </div>
             </li>
             <li class="sub-item">
@@ -46,7 +47,45 @@
                 routerLinkActive="active"
               >
                 <i class="bi bi-list-ul sub-icon"></i>
-                <span class="sub-text">All Students</span>
+                <span class="sub-text">{{
+                  getTranslation("all_students")
+                }}</span>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link" (click)="toggleTeachersSubmenu()">
+            <i class="bi bi-person-workspace icon"></i>
+            <span class="nav-text">{{ getTranslation("teachers") }}</span>
+            <i
+              class="bi bi-chevron-down arrow"
+              [ngClass]="{ rotate: isTeachersOpen }"
+            ></i>
+          </div>
+          <ul class="submenu" [ngClass]="{ active: isTeachersOpen }">
+            <li class="sub-item">
+              <div
+                class="sub-link"
+                routerLink="/addteacher"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-person-plus sub-icon"></i>
+                <span class="sub-text">{{
+                  getTranslation("add_teacher")
+                }}</span>
+              </div>
+            </li>
+            <li class="sub-item">
+              <div
+                class="sub-link"
+                routerLink="/allteacher"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-list-ul sub-icon"></i>
+                <span class="sub-text">{{
+                  getTranslation("all_teachers")
+                }}</span>
               </div>
             </li>
           </ul>
@@ -54,12 +93,34 @@
       </ul>
     </nav>
 
+    <div class="language-toggle-container">
+      <div class="language-label">
+        <i class="bi bi-globe icon"></i>
+        <span class="language-text">{{ getTranslation("language") }}</span>
+      </div>
+      <div class="language-toggle-btn">
+        <button
+          class="lang-btn"
+          [ngClass]="{ active: languageService.getLanguage() === 'english' }"
+          (click)="setLanguage('english')"
+        >
+          English
+        </button>
+        <button
+          class="lang-btn"
+          [ngClass]="{ active: languageService.getLanguage() === 'sinhala' }"
+          (click)="setLanguage('sinhala')"
+        >
+          Sinhala
+        </button>
+      </div>
+    </div>
+
     <div class="logout-container">
-      <button class="logout-btn">Logout</button>
+      <button class="logout-btn">{{ getTranslation("logout") }}</button>
     </div>
   </div>
 
-  <!-- Main content area -->
   <div class="content-area">
     <router-outlet></router-outlet>
   </div>

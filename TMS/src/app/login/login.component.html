@@ -1,1 +1,35 @@
-<p>login works!</p>
+<div class="login-container">
+  <form class="login-form" (ngSubmit)="onSubmit()">
+    <h2 class="login-title">{{ getTranslation("login") }}</h2>
+
+    <div class="input-group">
+      <label for="username">{{ getTranslation("username") }}</label>
+      <input
+        type="text"
+        id="username"
+        [(ngModel)]="username"
+        name="username"
+        required
+        placeholder="{{ getTranslation('enter_username') }}"
+        class="fade-in"
+      />
+    </div>
+
+    <div class="input-group">
+      <label for="password">{{ getTranslation("password") }}</label>
+      <input
+        type="password"
+        id="password"
+        [(ngModel)]="password"
+        name="password"
+        required
+        placeholder="{{ getTranslation('enter_password') }}"
+        class="fade-in"
+      />
+    </div>
+
+    <button type="submit" class="login-btn" [disabled]="!username || !password">
+      {{ getTranslation("login") }}
+    </button>
+  </form>
+</div>
