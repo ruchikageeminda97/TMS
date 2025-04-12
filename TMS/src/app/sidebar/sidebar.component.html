@@ -8,6 +8,7 @@
 
     <nav class="sidebar-nav">
       <ul>
+        <!-- dashboard -->
         <li class="nav-item">
           <div
             class="nav-link"
@@ -18,8 +19,13 @@
             <span class="nav-text">{{ getTranslation("dashboard") }}</span>
           </div>
         </li>
+        <!-- students -->
         <li class="nav-item">
-          <div class="nav-link" (click)="toggleStudentsSubmenu()">
+          <div
+            routerLink="/addstudent"
+            class="nav-link"
+            (click)="toggleStudentsSubmenu()"
+          >
             <i class="bi bi-people icon"></i>
             <span class="nav-text">{{ getTranslation("students") }}</span>
             <i
@@ -54,8 +60,14 @@
             </li>
           </ul>
         </li>
+        <!-- teachers -->
+
         <li class="nav-item">
-          <div class="nav-link" (click)="toggleTeachersSubmenu()">
+          <div
+            routerLink="/addteacher"
+            class="nav-link"
+            (click)="toggleTeachersSubmenu()"
+          >
             <i class="bi bi-person-workspace icon"></i>
             <span class="nav-text">{{ getTranslation("teachers") }}</span>
             <i
@@ -91,8 +103,13 @@
           </ul>
         </li>
 
+        <!-- class -->
         <li class="nav-item">
-          <div class="nav-link" (click)="toggleClassesSubmenu()">
+          <div
+            routerLink="/addclass"
+            class="nav-link"
+            (click)="toggleClassesSubmenu()"
+          >
             <i class="bi bi-people icon"></i>
             <span class="nav-text">{{ getTranslation("class") }}</span>
             <i
@@ -123,6 +140,16 @@
                 <span class="sub-text">{{
                   getTranslation("all_classes")
                 }}</span>
+              </div>
+            </li>
+            <li class="sub-item">
+              <div
+                class="sub-link"
+                routerLink="/stu_enroll"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-list-ul sub-icon"></i>
+                <span class="sub-text">{{ getTranslation("stu_enroll") }}</span>
               </div>
             </li>
           </ul>

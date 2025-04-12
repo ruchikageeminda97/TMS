@@ -20,8 +20,8 @@ export class SidebarComponent {
     public languageService: LanguageService,
     public classLanguageService: ClassLanguageService
   ) {
-    console.log('LanguageService in Sidebar:', this.languageService);
-    console.log('ClassLanguageService in Sidebar:', this.classLanguageService);
+    // console.log('LanguageService in Sidebar:', this.languageService);
+    // console.log('ClassLanguageService in Sidebar:', this.classLanguageService);
   }
 
   toggleStudentsSubmenu(): void {

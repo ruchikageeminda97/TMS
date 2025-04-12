@@ -10,8 +10,12 @@ export class LanguageService {
     english: {
       dashboard: 'Dashboard',
       students: 'Students',
+      all_classes: 'All Classes',
+      stu_enroll: 'Student Enrollment',
+      add_new_student: 'Add New Student',
       add_student: 'Add Student',
       all_students: 'All Students',
+      add_new_class: 'Add New Class',
       teachers: 'Teachers',
       add_teacher: 'Add Teacher',
       all_teachers: 'All Teachers',
@@ -51,8 +55,12 @@ export class LanguageService {
       confirm_delete: 'Are you sure you want to delete this student?'
     },
     sinhala: {
+      stu_enroll: 'සිසුන් ඇතුලත් කිරීම',
+      add_new_class: 'නව පන්තියක් එකතු කරන්න',
+      all_classes: 'සියලුම පන්තියන්',
       dashboard: 'උපකරණ පුවරුව',
       students: 'සිසුන්',
+      add_new_student: 'නව සිසුවෙකු එකතු කරන්න',
       add_student: 'සිසුවෙකු එකතු කරන්න',
       all_students: 'සියලුම සිසුන්',
       teachers: 'ගුරුවරු',

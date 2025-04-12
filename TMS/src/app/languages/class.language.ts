@@ -38,9 +38,11 @@ export class ClassLanguageService {
       drag_drop_csv: 'Drag and drop your CSV file here or click to upload.',
       choose_file: 'Choose File',
       cancel: 'Cancel',
-      import: 'Import'
+      import: 'Import',
+      add_new_class: 'Add New Class',
     },
     sinhala: {
+      
       add_new_class: 'නව පන්තියක් එකතු කරන්න',
       class_name: 'පන්තියේ නම',
       enter_class_name: 'පන්තියේ නම ඇතුලත් කරන්න',

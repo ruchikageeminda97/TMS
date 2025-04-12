@@ -3,38 +3,53 @@
     <div class="card">
       <i class="bi bi-people card-icon"></i>
       <h3 class="card-title">{{ getTranslation("students") }}</h3>
-      <p class="card-value">150</p>
+      <p class="card-value">{{ studentCount }}</p>
     </div>
     <div class="card">
       <i class="bi bi-person-workspace card-icon"></i>
       <h3 class="card-title">{{ getTranslation("teachers") }}</h3>
-      <p class="card-value">25</p>
+      <p class="card-value">{{ teacherCount }}</p>
     </div>
     <div class="card">
       <i class="bi bi-book card-icon"></i>
       <h3 class="card-title">{{ getTranslation("classes") }}</h3>
-      <p class="card-value">40</p>
+      <p class="card-value">{{ classCount }}</p>
     </div>
     <div class="card">
       <i class="bi bi-currency-dollar card-icon"></i>
       <h3 class="card-title">{{ getTranslation("today_income") }}</h3>
-      <p class="card-value">LKR 12,500</p>
+      <p class="card-value">{{ todayIncome }}</p>
     </div>
     <div class="card">
       <i class="bi bi-clock card-icon"></i>
       <h3 class="card-title">{{ getTranslation("ongoing_classes") }}</h3>
-      <p class="card-value">8</p>
+      <p class="card-value">{{ ongoingClasses }}</p>
     </div>
   </div>
   <div class="future-section">
-    <!-- chart  -->
-    <div
-      style="
-        display: flex;
-        width: 50%;
-        height: 350px;
-        background-color: aquamarine;
-      "
-    ></div>
+    <div class="chart-container">
+      <h3 class="chart-title">Last 7 Days Income</h3>
+      <div class="chart-wrapper">
+        <div class="y-axis">
+          <span
+            class="y-label"
+            *ngFor="let label of yAxisLabels"
+            [style.top.%]="label.position"
+          >
+            {{ formatIncome(label.value) }}
+          </span>
+        </div>
+        <div class="bar-chart">
+          <div
+            class="bar"
+            *ngFor="let item of incomes; trackBy: trackByDate"
+            [style.height.%]="getBarHeight(item.income)"
+            [attr.data-income]="formatIncome(item.income)"
+          >
+            <span class="bar-label">{{ item.date }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -30,7 +30,7 @@ export class AddStudentComponent {
   isImportModalOpen = false;
 
   constructor(public languageService: LanguageService) {
-    console.log('LanguageService in AddStudent:', this.languageService); 
+    // console.log('LanguageService in AddStudent:', this.languageService); 
   }
 
   getTranslation(key: string): string {
