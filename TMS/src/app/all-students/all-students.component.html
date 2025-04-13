@@ -20,7 +20,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let student of students" class="animate-row">
+          <tr
+            *ngFor="let student of students; let i = index"
+            class="animate-row"
+            style="--row-index: {{ i }}"
+          >
             <td>{{ student.StudentID }}</td>
             <td>{{ student.firstName }}</td>
             <td>{{ student.lastName }}</td>
@@ -30,7 +34,7 @@
             <td>{{ student.email }}</td>
             <td>{{ student.address }}</td>
             <td>{{ student.enrollmentDate }}</td>
-            <td>
+            <td style="display: flex">
               <button
                 class="btn btn-sm btn-primary me-2 animate-button"
                 (click)="editStudent(student)"

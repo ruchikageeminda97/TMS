@@ -26,29 +26,59 @@
       <p class="card-value">{{ ongoingClasses }}</p>
     </div>
   </div>
-  <div class="future-section">
-    <div class="chart-container">
-      <h3 class="chart-title">Last 7 Days Income</h3>
-      <div class="chart-wrapper">
-        <div class="y-axis">
-          <span
-            class="y-label"
-            *ngFor="let label of yAxisLabels"
-            [style.top.%]="label.position"
-          >
-            {{ formatIncome(label.value) }}
-          </span>
-        </div>
-        <div class="bar-chart">
-          <div
-            class="bar"
-            *ngFor="let item of incomes; trackBy: trackByDate"
-            [style.height.%]="getBarHeight(item.income)"
-            [attr.data-income]="formatIncome(item.income)"
-          >
-            <span class="bar-label">{{ item.date }}</span>
+  <div style="display: flex; width: 100%; justify-content: space-between">
+    <!-- First section: Chart -->
+    <div class="future-section" style="flex: 0 0 59%">
+      <div class="chart-container">
+        <h3 class="chart-title">Last 7 Days Income</h3>
+        <div class="chart-wrapper">
+          <div class="y-axis">
+            <span
+              class="y-label"
+              *ngFor="let label of yAxisLabels"
+              [style.top.%]="label.position"
+            >
+              {{ formatIncome(label.value) }}
+            </span>
+          </div>
+          <div class="bar-chart">
+            <div
+              class="bar"
+              *ngFor="let item of incomes; trackBy: trackByDate"
+              [style.height.%]="getBarHeight(item.income)"
+              [attr.data-income]="formatIncome(item.income)"
+            >
+              <span style="font-size: 12px" class="bar-label">{{
+                item.date
+              }}</span>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Second section: Table -->
+    <div class="future-section" style="flex: 0 0 39%">
+      <div class="table-container">
+        <h3 class="table-title">Today's Classes</h3>
+        <table class="classes-table">
+          <thead>
+            <tr>
+              <th>Class Name</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Teacher Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let class of classes">
+              <td>{{ class.className }}</td>
+              <td>{{ class.startTime }}</td>
+              <td>{{ class.endTime }}</td>
+              <td>{{ class.teacherName }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
