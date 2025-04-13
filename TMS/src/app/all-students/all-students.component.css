@@ -28,10 +28,10 @@
 }
 
 .table-responsive {
-  max-height: 550px; /* Set max height for scrollable table */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 80vh;
+  overflow-y: auto;
   position: relative;
-  background: #fff; /* Ensure background consistency */
+  background: #fff; 
   border-radius: 8px;
 }
 
@@ -171,7 +171,7 @@
     margin-left: 0;
   }
   .table-responsive {
-    max-height: 500px; /* Adjust for smaller screens */
+    max-height: 500px; 
   }
   .table {
     font-size: 0.85rem;

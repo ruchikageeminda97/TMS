@@ -187,14 +187,5 @@ export class AllStudentsComponent {
     return this.languageService.getTranslation(key);
   }
 
-  editStudent(student: Student) {
-    console.log('Edit student:', student);
-  }
-
-  deleteStudent(studentId: string) {
-    if (confirm(this.getTranslation('confirm_delete'))) { 
-      this.students = this.students.filter(student => student.StudentID !== studentId);
-      console.log('Deleted student with ID:', studentId);
-    }
-  }
+ 
 }

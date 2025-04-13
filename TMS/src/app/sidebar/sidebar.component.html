@@ -169,6 +169,7 @@
             [ngClass]="{ active: languageService.getLanguage() === 'english' }"
             (click)="setLanguage('english')"
           >
+            <i class="bi bi-globe-americas lang-icon"></i>
             English
           </button>
           <button
@@ -176,7 +177,8 @@
             [ngClass]="{ active: languageService.getLanguage() === 'sinhala' }"
             (click)="setLanguage('sinhala')"
           >
-            Sinhala
+            <i class="bi bi-globe-asia-australia lang-icon"></i>
+            සිංහල
           </button>
         </div>
       </div>

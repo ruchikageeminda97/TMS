@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LanguageService {
+  // BehaviorSubject to broadcast language changes
+  private languageSubject = new BehaviorSubject<string>('english');
+  language$ = this.languageSubject.asObservable();
+
   private selectedLanguage: string = 'english';
 
   private translations: any = {
     english: {
+      sinhala: 'Sinhala',
       dashboard: 'Dashboard',
       students: 'Students',
       all_classes: 'All Classes',
@@ -38,7 +44,6 @@ export class LanguageService {
       day_5: 'Day 5',
       day_6: 'Day 6',
       day_7: 'Day 7',
-
       // AllStudentsComponent translations
       student_id: 'Student ID',
       first_name: 'First Name',
@@ -55,6 +60,7 @@ export class LanguageService {
       confirm_delete: 'Are you sure you want to delete this student?'
     },
     sinhala: {
+      sinhala: 'සිංහල',
       stu_enroll: 'සිසුන් ඇතුලත් කිරීම',
       add_new_class: 'නව පන්තියක් එකතු කරන්න',
       all_classes: 'සියලුම පන්තියන්',
@@ -85,7 +91,6 @@ export class LanguageService {
       day_5: 'දින 5',
       day_6: 'දින 6',
       day_7: 'දින 7',
-
       // AllStudentsComponent translations
       student_id: 'සිසු අංකය',
       first_name: 'මුල් නම',
@@ -103,8 +108,9 @@ export class LanguageService {
     }
   };
 
-  setLanguage(language: string) {
+  setLanguage(language: string): void {
     this.selectedLanguage = language;
+    this.languageSubject.next(language); // Notify subscribers of the language change
   }
 
   getLanguage(): string {

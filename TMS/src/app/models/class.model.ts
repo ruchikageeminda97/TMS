@@ -6,7 +6,7 @@ export interface Class {
     date: string;
     time: string;
     subject: string;
-    fee: null ;
+    fee: number ;
     student:string[];
 
   }  

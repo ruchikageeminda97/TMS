@@ -1,20 +1,17 @@
-/* src/styles.css */
-html, body {
-    height: 100%;
-    margin: 0;
-    font-family: 'Noto Sans Sinhala', 'Arial', sans-serif;
-    font-weight: 500; 
-    font-size: 0.9375rem; 
-    line-height: 1.6;
-  }
-  
-  
-  :lang(si) {
-    letter-spacing: 0.02em; 
-  }
-  
-  
-  :lang(en) {
-    font-family: 'Arial', sans-serif;
-    font-weight: 400; 
-  }
+.animate-button {
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: #4a90e2;
+  transition: all 0.3s ease;
+}
+
+.animate-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: #357abd;
+}
+
+/*all table ---------- */
+
+/* ----------- */

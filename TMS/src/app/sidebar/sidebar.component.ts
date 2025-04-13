@@ -1,8 +1,9 @@
 import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { LanguageService } from '../language.service'; 
-import { ClassLanguageService } from '../languages/class.language'; 
+import { LanguageService } from '../language.service';
+import { ClassLanguageService } from '../languages/class.language';
+import { TeacherLanguageService } from '../languages/teacher.language'; // Import TeacherLanguageService
 
 @Component({
   selector: 'app-sidebar',
@@ -18,10 +19,10 @@ export class SidebarComponent {
 
   constructor(
     public languageService: LanguageService,
-    public classLanguageService: ClassLanguageService
+    public classLanguageService: ClassLanguageService,
+    public teacherLanguageService: TeacherLanguageService 
   ) {
-    // console.log('LanguageService in Sidebar:', this.languageService);
-    // console.log('ClassLanguageService in Sidebar:', this.classLanguageService);
+    
   }
 
   toggleStudentsSubmenu(): void {
@@ -48,12 +49,13 @@ export class SidebarComponent {
     }
   }
 
-  setLanguage(language: string) {
+  setLanguage(language: string): void {
     this.languageService.setLanguage(language); 
     this.classLanguageService.setLanguage(language); 
+    this.teacherLanguageService.setLanguage(language); 
   }
 
   getTranslation(key: string): string {
-    return this.languageService.getTranslation(key); 
+    return this.languageService.getTranslation(key);
   }
 }

@@ -35,18 +35,13 @@
             <td>{{ student.address }}</td>
             <td>{{ student.enrollmentDate }}</td>
             <td style="display: flex">
-              <button
-                class="btn btn-sm btn-primary me-2 animate-button"
-                (click)="editStudent(student)"
-                title="{{ getTranslation('edit') }}"
-              >
-                <i class="bi bi-pencil"></i>
+              <button class="btn btn-sm btn-primary me-2 animate-button">
+                <i class="bi bi-pencil-square me-1"></i>
+                {{ getTranslation("edit") }}
               </button>
-              <button
-                class="btn btn-sm btn-danger animate-button"
-                title="{{ getTranslation('delete') }}"
-              >
-                <i class="bi bi-trash"></i>
+              <button class="btn btn-sm btn-danger animate-button">
+                <i class="bi bi-trash me-1"></i>
+                {{ getTranslation("delete") }}
               </button>
             </td>
           </tr>

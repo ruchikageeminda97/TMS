@@ -8,7 +8,7 @@ export class ClassLanguageService {
 
   private translations: any = {
     english: {
-      add_new_lass: 'Add New Class',
+      add_new_class: 'Add New Class',
       class_name: 'Class Name',
       enter_class_name: 'Enter class name',
       invalid_class_name: 'Please enter a valid class name (letters and numbers only).',
@@ -33,16 +33,21 @@ export class ClassLanguageService {
       add_class: 'Add Class',
       class_added_success: 'Class added successfully!',
       fill_all_fields: 'Please fill all fields.',
-      // Optional import translations
       import_class_list: 'Import Class List',
       drag_drop_csv: 'Drag and drop your CSV file here or click to upload.',
       choose_file: 'Choose File',
       cancel: 'Cancel',
       import: 'Import',
-      add_new_class: 'Add New Class',
+      // AllClassesComponent translations
+      all_classes: 'All Classes',
+      class_id: 'Class ID',
+      student_count: 'Student Count',
+      actions: 'Actions',
+      edit: 'Edit',
+      delete: 'Delete',
+      confirm_delete: 'Are you sure you want to delete this class?'
     },
     sinhala: {
-      
       add_new_class: 'නව පන්තියක් එකතු කරන්න',
       class_name: 'පන්තියේ නම',
       enter_class_name: 'පන්තියේ නම ඇතුලත් කරන්න',
@@ -68,12 +73,19 @@ export class ClassLanguageService {
       add_class: 'පන්තිය එකතු කරන්න',
       class_added_success: 'පන්තිය සාර්ථකව එකතු කරන ලදී!',
       fill_all_fields: 'කරුණාකර සියලුම ක්ෂේත්‍ර පුරවන්න.',
-      // Optional import translations
       import_class_list: 'පන්ති ලැයිස්තුව ආයාත කරන්න',
       drag_drop_csv: 'ඔබේ CSV ගොනුව මෙහි ඇද දමන්න හෝ උඩුගත කිරීමට ක්ලික් කරන්න.',
       choose_file: 'ගොනුව තෝරන්න',
       cancel: 'අවලංගු කරන්න',
-      import: 'ආයාත කරන්න'
+      import: 'ආයාත කරන්න',
+      // AllClassesComponent translations
+      all_classes: 'සියලුම පන්ති',
+      class_id: 'පන්ති හැඳුනුම් අංකය',
+      student_count: 'සිසුන් ගණන',
+      actions: 'ක්‍රියා',
+      edit: 'සංස්කරණය',
+      delete: 'මකන්න',
+      confirm_delete: 'ඔබට මෙම පන්තිය මැකීමට අවශ්‍ය බව විශ්වාසද?'
     }
   };
 

@@ -20,7 +20,7 @@ export class AddClassComponent {
     date: "",
     time: "",
     subject: "",
-    fee: null,
+    fee: 0, 
     student: []
   };
 
@@ -59,7 +59,7 @@ export class AddClassComponent {
       date: "",
       time: "",
       subject: "",
-      fee: null,
+      fee: 0,
       student: []
     };
     this.startTime = "";
