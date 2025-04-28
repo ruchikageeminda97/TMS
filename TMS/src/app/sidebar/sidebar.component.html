@@ -1,5 +1,8 @@
 <div class="main-div">
-  <div class="sidebar-main">
+  <button class="mobile-toggle-btn" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+    <i class="bi bi-list"></i>
+  </button>
+  <div class="sidebar-main" [ngClass]="{ active: isSidebarOpen }" @slideIn>
     <div class="title">
       <div class="logo-container">
         <h1>TMS</h1>
@@ -61,7 +64,6 @@
           </ul>
         </li>
         <!-- teachers -->
-
         <li class="nav-item">
           <div
             routerLink="/addteacher"
@@ -102,7 +104,6 @@
             </li>
           </ul>
         </li>
-
         <!-- class -->
         <li class="nav-item">
           <div
@@ -187,6 +188,20 @@
   </div>
 
   <div class="content-area">
-    <router-outlet></router-outlet>
+    <!-- Time and date -->
+    <div class="datetime-container">
+      <div class="datetime-item">
+        <i class="bi bi-calendar3 icon"></i>
+        <span class="datetime-text">{{ currentDate }}</span>
+      </div>
+      <div class="datetime-item">
+        <i class="bi bi-clock icon"></i>
+        <span class="datetime-text">{{ currentTime }}</span>
+      </div>
+    </div>
+    
+    <div>
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

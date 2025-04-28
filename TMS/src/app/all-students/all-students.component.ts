@@ -5,8 +5,8 @@ import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-all-students',
-  standalone: true, // Ensure standalone is true
-  imports: [NgFor], // No additional imports needed for now
+  standalone: true, 
+  imports: [NgFor], 
   templateUrl: './all-students.component.html',
   styleUrls: ['./all-students.component.css']
 })
@@ -180,7 +180,7 @@ export class AllStudentsComponent {
   ];
 
   constructor(public languageService: LanguageService) {
-    console.log('LanguageService in AllStudents:', this.languageService); 
+    // console.log('LanguageService in AllStudents:', this.languageService); 
   }
 
   getTranslation(key: string): string {
