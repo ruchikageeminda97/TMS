@@ -4,13 +4,13 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100vh; /* Ensure full height */
+  min-height: 100vh; 
 }
 
 .container {
   max-width: 100%;
-  width: 100%; /* Full width for better fit */
-  padding: 0 10px; /* Reduced padding for small screens */
+  width: 100%; 
+  padding: 0 10px; 
   box-sizing: border-box;
 }
 
@@ -30,7 +30,7 @@
 .table-responsive {
   max-height: 80vh;
   overflow-y: auto;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden; 
   position: relative;
   background: #fff;
   border-radius: 8px;
@@ -41,7 +41,7 @@
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
-  table-layout: auto; /* Allow columns to adjust based on content */
+  table-layout: auto; 
 }
 
 .thead-dark {
@@ -49,11 +49,11 @@
   color: #fff;
   position: sticky;
   top: 0;
-  z-index: 1; /* Ensure header stays above content */
+  z-index: 1; 
 }
 
 .thead-dark th {
-  padding: 12px 8px; /* Reduced padding */
+  padding: 12px 8px; 
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -64,12 +64,12 @@
 .table th,
 .table td {
   vertical-align: middle;
-  padding: 10px 8px; /* Reduced padding for compactness */
+  padding: 10px 8px; 
   font-size: 0.85rem;
   border-bottom: 1px solid #e9ecef;
   text-align: left;
-  white-space: normal; /* Allow text wrapping */
-  word-break: break-word; /* Break long words */
+  white-space: normal; 
+  word-break: break-word; 
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -81,10 +81,9 @@
   transition: background-color 0.3s ease;
 }
 
-/* Column width adjustments */
 .table th:nth-child(1),
 .table td:nth-child(1) {
-  width: 8%; /* Student ID */
+  width: 8%; 
   min-width: 60px;
 }
 
@@ -92,49 +91,49 @@
 .table td:nth-child(2),
 .table th:nth-child(3),
 .table td:nth-child(3) {
-  width: 12%; /* First Name, Last Name */
+  width: 12%; 
   min-width: 80px;
 }
 
 .table th:nth-child(4),
 .table td:nth-child(4) {
-  width: 10%; /* Date of Birth */
+  width: 10%; 
   min-width: 90px;
 }
 
 .table th:nth-child(5),
 .table td:nth-child(5) {
-  width: 8%; /* Gender */
+  width: 8%; 
   min-width: 60px;
 }
 
 .table th:nth-child(6),
 .table td:nth-child(6) {
-  width: 12%; /* Contact Number */
+  width: 12%; 
   min-width: 100px;
 }
 
 .table th:nth-child(7),
 .table td:nth-child(7) {
-  width: 15%; /* Email */
+  width: 15%; 
   min-width: 120px;
 }
 
 .table th:nth-child(8),
 .table td:nth-child(8) {
-  width: 15%; /* Address */
+  width: 15%; 
   min-width: 120px;
 }
 
 .table th:nth-child(9),
 .table td:nth-child(9) {
-  width: 10%; /* Admission Date */
+  width: 10%; 
   min-width: 90px;
 }
 
 .table th:nth-child(10),
 .table td:nth-child(10) {
-  width: 10%; /* Actions */
+  width: 10%; 
   min-width: 100px;
 }
 
@@ -145,10 +144,8 @@
 .btn-primary,
 .btn-danger,
 .table-responsive::-webkit-scrollbar {
-  /* Unchanged from original */
 }
 
-/* Define keyframes for fadeInDown */
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -160,7 +157,6 @@
   }
 }
 
-/* Define keyframes for fadeIn */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -170,7 +166,6 @@
   }
 }
 
-/* Define keyframes for slideIn */
 @keyframes slideIn {
   from {
     transform: translateX(-100%);
@@ -180,7 +175,6 @@
   }
 }
 
-/* Mobile-friendly stacked layout */
 @media (max-width: 768px) {
   .content-area {
     margin-left: 0;
@@ -189,16 +183,16 @@
 
   .table-responsive {
     max-height: 500px;
-    overflow-x: hidden; /* Explicitly disable horizontal scroll */
+    overflow-x: hidden; 
   }
 
   .table {
-    display: block; /* Stack table for mobile */
+    display: block; 
     font-size: 0.8rem;
   }
 
   .thead-dark {
-    display: none; /* Hide header on mobile */
+    display: none; 
   }
 
   .table tbody,
@@ -224,7 +218,6 @@
     text-align: left;
   }
 
-  /* Add labels for mobile view */
   .table td:before {
     content: attr(data-label);
     font-weight: bold;

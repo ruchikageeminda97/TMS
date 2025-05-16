@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, NgClass, DatePipe],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NgClass],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
   providers: [DatePipe],

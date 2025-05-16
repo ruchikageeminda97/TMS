@@ -18,6 +18,31 @@
       class="p-4 bg-white rounded shadow animate-form"
     >
       <div class="row">
+        <!-- Student ID -->
+        <div class="col-md-6 mb-3">
+          <label for="studentId" class="form-label">{{
+            getTranslation("student_id")
+          }}</label>
+          <input
+            type="text"
+            id="studentId"
+            name="studentId"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_student_id')"
+            [(ngModel)]="student.student_id"
+            required
+          />
+          <div
+            *ngIf="
+              studentForm.controls['studentId']?.invalid &&
+              studentForm.controls['studentId']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_student_id") }}
+          </div>
+        </div>
+
         <!-- First Name -->
         <div class="col-md-6 mb-3">
           <label for="firstName" class="form-label">{{
@@ -29,7 +54,7 @@
             name="firstName"
             class="form-control animate-input"
             [placeholder]="getTranslation('enter_first_name')"
-            [(ngModel)]="student.firstName"
+            [(ngModel)]="student.first_name"
             required
             pattern="[A-Za-z]+"
           />
@@ -55,7 +80,7 @@
             name="lastName"
             class="form-control animate-input"
             [placeholder]="getTranslation('enter_last_name')"
-            [(ngModel)]="student.lastName"
+            [(ngModel)]="student.last_name"
             required
             pattern="[A-Za-z]+"
           />
@@ -82,7 +107,7 @@
             id="dateOfBirth"
             name="dateOfBirth"
             class="form-control animate-input"
-            [(ngModel)]="student.dateOfBirth"
+            [(ngModel)]="student.date_of_birth"
             required
           />
           <div
@@ -139,7 +164,7 @@
             name="contactNumber"
             class="form-control animate-input"
             [placeholder]="getTranslation('enter_contact_number')"
-            [(ngModel)]="student.contactNumber"
+            [(ngModel)]="student.contact_number"
             required
             pattern="[0-9]{10}"
           />
@@ -215,7 +240,7 @@
           id="enrollmentDate"
           name="enrollmentDate"
           class="form-control animate-input"
-          [(ngModel)]="student.enrollmentDate"
+          [(ngModel)]="student.enrollment_date"
           required
         />
         <div
@@ -228,6 +253,13 @@
           {{ getTranslation("invalid_enrollment_date") }}
         </div>
       </div>
+
+      <!-- Hidden Status Field -->
+      <input
+        type="hidden"
+        name="status"
+        [(ngModel)]="student.status"
+      />
 
       <!-- Submit Button -->
       <div class="text-center">

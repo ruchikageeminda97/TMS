@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LanguageService } from '../language.service'; 
+import { LanguageService } from '../language.service';
 import { Student } from '../models/student.model';
-
 
 @Component({
   selector: 'app-add-student',
@@ -14,24 +13,23 @@ import { Student } from '../models/student.model';
 })
 export class AddStudentComponent {
   student: Student = {
-    StudentID:'',
-    firstName: '',
-    lastName: '',
-    dateOfBirth: '',
+    student_id: '',
+    first_name: '',
+    last_name: '',
+    date_of_birth: '',
     gender: '',
-    contactNumber: '',
+    contact_number: '',
     email: '',
     address: '',
-    enrollmentDate: '',
+    enrollment_date: '',
+    status: 'Active',
   };
 
   selectedFile: File | null = null;
   isDragging = false;
   isImportModalOpen = false;
 
-  constructor(public languageService: LanguageService) {
-    // console.log('LanguageService in AddStudent:', this.languageService); 
-  }
+  constructor(public languageService: LanguageService) {}
 
   getTranslation(key: string): string {
     return this.languageService.getTranslation(key);
@@ -64,7 +62,7 @@ export class AddStudentComponent {
     if (files && files.length > 0 && files[0].type === 'text/csv') {
       this.selectedFile = files[0];
     } else {
-      alert(this.getTranslation('invalid_csv_file')); 
+      alert(this.getTranslation('invalid_csv_file'));
     }
   }
 
@@ -83,7 +81,7 @@ export class AddStudentComponent {
         const students = this.parseCsv(text);
         console.log('Imported Students:', students);
         // TODO: Send students to backend API
-        alert(this.getTranslation('csv_import_success')); 
+        alert(this.getTranslation('csv_import_success'));
         this.closeImportModal();
       };
       reader.readAsText(this.selectedFile);
@@ -92,30 +90,31 @@ export class AddStudentComponent {
 
   private parseCsv(data: string): Student[] {
     const students: Student[] = [];
-    const rows = data.split('\n').slice(1); 
+    const rows = data.split('\n').slice(1);
     rows.forEach((row) => {
       const [
-        StudentID,
-        firstName,
-        lastName,
-        dateOfBirth,
+        student_id,
+        first_name,
+        last_name,
+        date_of_birth,
         gender,
-        contactNumber,
+        contact_number,
         email,
         address,
-        enrollmentDate,
+        enrollment_date,
       ] = row.split(',').map((item) => item.trim());
-      if (firstName && lastName) {
+      if (first_name && last_name) {
         students.push({
-          StudentID,
-          firstName,
-          lastName,
-          dateOfBirth,
+          student_id,
+          first_name,
+          last_name,
+          date_of_birth,
           gender,
-          contactNumber,
+          contact_number,
           email,
           address,
-          enrollmentDate,
+          enrollment_date,
+          status: 'Active',
         });
       }
     });
@@ -125,7 +124,8 @@ export class AddStudentComponent {
   onSubmit() {
     if (this.isFormValid()) {
       console.log('Student Data:', this.student);
-      alert(this.getTranslation('student_added_success')); 
+      // TODO: Send student data to backend API
+      alert(this.getTranslation('student_added_success'));
       this.resetForm();
     }
   }
@@ -138,15 +138,16 @@ export class AddStudentComponent {
 
   resetForm() {
     this.student = {
-      StudentID:'',
-      firstName: '',
-      lastName: '',
-      dateOfBirth: '',
+      student_id: '',
+      first_name: '',
+      last_name: '',
+      date_of_birth: '',
       gender: '',
-      contactNumber: '',
+      contact_number: '',
       email: '',
       address: '',
-      enrollmentDate: '',
+      enrollment_date: '',
+      status: 'Active',
     };
   }
 }

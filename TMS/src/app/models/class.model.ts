@@ -8,5 +8,4 @@ export interface Class {
     subject: string;
     fee: number ;
     student:string[];
-
   }  
