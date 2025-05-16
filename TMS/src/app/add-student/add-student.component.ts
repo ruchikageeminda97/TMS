@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LanguageService } from '../language.service';
+import { ApiService } from '../api_services/services';
 import { Student } from '../models/student.model';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-student',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, MatSnackBarModule],
   templateUrl: './add-student.component.html',
   styleUrls: ['./add-student.component.css'],
 })
@@ -29,10 +31,18 @@ export class AddStudentComponent {
   isDragging = false;
   isImportModalOpen = false;
 
-  constructor(public languageService: LanguageService) {}
+  constructor(
+    public languageService: LanguageService,
+    private apiService: ApiService,
+    private snackBar: MatSnackBar
+  ) {}
 
   getTranslation(key: string): string {
     return this.languageService.getTranslation(key);
+  }
+
+  private showSnackBar(message: string, action: string = 'Close', duration: number = 3000): void {
+    this.snackBar.open(message, action, { duration, verticalPosition: 'bottom' });
   }
 
   openImportModal() {
@@ -79,10 +89,20 @@ export class AddStudentComponent {
       reader.onload = (e) => {
         const text = e.target?.result as string;
         const students = this.parseCsv(text);
-        console.log('Imported Students:', students);
-        // TODO: Send students to backend API
-        alert(this.getTranslation('csv_import_success'));
-        this.closeImportModal();
+        if (students.length > 0) {
+          this.apiService.importStudents(students).subscribe({
+            next: (response) => {
+              this.showSnackBar(this.getTranslation('csv_import_success'));
+              this.closeImportModal();
+            },
+            error: (err) => {
+              console.error('Error importing students:', err);
+              this.showSnackBar(this.getTranslation('csv_import_failed'));
+            }
+          });
+        } else {
+          this.showSnackBar(this.getTranslation('csv_import_failed'));
+        }
       };
       reader.readAsText(this.selectedFile);
     }
@@ -123,10 +143,18 @@ export class AddStudentComponent {
 
   onSubmit() {
     if (this.isFormValid()) {
-      console.log('Student Data:', this.student);
-      // TODO: Send student data to backend API
-      alert(this.getTranslation('student_added_success'));
-      this.resetForm();
+      this.apiService.addStudent(this.student).subscribe({
+        next: (response) => {
+          this.showSnackBar(this.getTranslation('student_added_success'));
+          this.resetForm();
+        },
+        error: (err) => {
+          console.error('Error adding student:', err);
+          this.showSnackBar(this.getTranslation('student_add_failed'));
+        }
+      });
+    } else {
+      this.showSnackBar(this.getTranslation('student_add_failed'));
     }
   }
 

@@ -38,7 +38,7 @@ app = FastAPI(
 # Add CORS middleware with specific origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost", "http://127.0.0.1", "http://localhost:3000", "http://127.0.0.1:3000", "http://127.0.0.1:4200"],
+    allow_origins=["http://localhost", "http://127.0.0.1", "http://localhost:3000", "http://127.0.0.1:3000", "http://127.0.0.1:4200","http://localhost:4200"],
     allow_credentials=True,
     allow_methods=["POST", "GET", "OPTIONS"],
     allow_headers=["Content-Type", "Accept"],
@@ -47,7 +47,7 @@ app.add_middleware(
 # MongoDB configuration
 MONGO_HOST = "localhost"
 MONGO_PORT = 27017
-MONGO_DATABASE = "tcms"
+MONGO_DATABASE = "TCMS"
 
 # Initialize MongoDB client
 mongo_client = AsyncIOMotorClient(f"mongodb://{MONGO_HOST}:{MONGO_PORT}")
