@@ -1,16 +1,17 @@
 import { NgClass } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LanguageService } from '../language.service';
 import { ClassLanguageService } from '../languages/class.language';
 import { TeacherLanguageService } from '../languages/teacher.language';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, NgClass],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NgClass, MatSnackBarModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
   providers: [DatePipe],
@@ -39,7 +40,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
     public languageService: LanguageService,
     public classLanguageService: ClassLanguageService,
     public teacherLanguageService: TeacherLanguageService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +60,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const now = new Date();
     this.currentDate = this.datePipe.transform(now, 'EEEE, MMMM d, yyyy') || now.toDateString();
     this.currentTime = this.datePipe.transform(now, 'HH:mm:ss') || now.toTimeString().split(' ')[0];
+    const currentDay = this.datePipe.transform(now, 'EEEE') || now.toLocaleDateString('en-US', { weekday: 'long' });
+    localStorage.setItem('day', currentDay);
   }
 
   toggleSidebar(): void {
@@ -95,5 +100,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   getTranslation(key: string): string {
     return this.languageService.getTranslation(key);
+  }
+
+  logout(): void {
+    localStorage.removeItem('username');
+    localStorage.removeItem('day');
+    this.snackBar.open(this.getTranslation('logout_success'), 'Close', {
+      duration: 3000,
+      verticalPosition: 'bottom'
+    });
+    this.router.navigate(['/']);
   }
 }

@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
-import { LanguageService } from '../language.service';
+import { Component, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { LanguageService } from '../language.service';
+import { ApiService, StatsCounts } from '../api_services/services';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, MatSnackBarModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
-  studentCount: number = 150;
-  teacherCount: number = 25;
-  classCount: number = 40;
-  todayIncome: string = 'LKR 12,500';
-  ongoingClasses: number = 8;
+export class DashboardComponent implements OnInit {
+  studentCount: number = 0; 
+  teacherCount: number = 0; 
+  classCount: number = 0;
+  todayIncome: string = 'LKR 500';
+  ongoingClasses: number = 1;
 
   incomes = [
     { date: 'Apr 6', income: 8000 },
@@ -26,7 +28,6 @@ export class DashboardComponent {
     { date: 'Apr 12', income: 12500 }
   ];
 
-  // Dummy data for today's classes
   classes = [
     { className: 'Mathematics', startTime: '09:00 AM', endTime: '10:00 AM', teacherName: 'Mr. Smith' },
     { className: 'Physics', startTime: '10:15 AM', endTime: '11:15 AM', teacherName: 'Ms. Johnson' },
@@ -39,16 +40,42 @@ export class DashboardComponent {
   yAxisMax!: number;
   yAxisLabels: { value: number; position: number }[] = [];
 
-  constructor(public languageService: LanguageService) {
-    this.updateYAxis(); 
+  constructor(
+    public languageService: LanguageService,
+    private apiService: ApiService,
+    private snackBar: MatSnackBar
+  ) {
+    this.updateYAxis();
+  }
+
+  ngOnInit(): void {
+    this.fetchStats();
   }
 
   getTranslation(key: string): string {
     return this.languageService.getTranslation(key);
   }
 
+  private showSnackBar(message: string, action: string = 'Close', duration: number = 3000): void {
+    this.snackBar.open(message, action, { duration, verticalPosition: 'bottom' });
+  }
+
+  private fetchStats(): void {
+    this.apiService.getStatsCounts().subscribe({
+      next: (stats: StatsCounts) => {
+        this.studentCount = stats.students;
+        this.teacherCount = stats.teachers;
+        this.classCount = stats.classes;
+      },
+      error: (err) => {
+        console.error('Error fetching stats:', err);
+        this.showSnackBar(this.getTranslation('fetch_stats_failed'));
+      }
+    });
+  }
+
   getBarHeight(income: number): number {
-    return (income / this.yAxisMax) * 90; 
+    return (income / this.yAxisMax) * 90;
   }
 
   formatIncome(income: number): string {
@@ -56,10 +83,10 @@ export class DashboardComponent {
   }
 
   private updateYAxis() {
-    const maxIncome = Math.max(...this.incomes.map(item => item.income), 1000); 
+    const maxIncome = Math.max(...this.incomes.map(item => item.income), 1000);
     this.yAxisMax = Math.ceil(maxIncome / 1000) * 1000;
     
-    const increment = this.yAxisMax / 4; 
+    const increment = this.yAxisMax / 4;
     this.yAxisLabels = [];
     for (let i = 0; i <= 4; i++) {
       const value = i * increment;
@@ -78,7 +105,7 @@ export class DashboardComponent {
       { date: 'Apr 11', income: 9500 },
       { date: 'Apr 12', income: 13000 }
     ];
-    this.updateYAxis(); 
+    this.updateYAxis();
   }
 
   trackByDate(index: number, item: { date: string; income: number }): string {

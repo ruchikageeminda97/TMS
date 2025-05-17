@@ -107,7 +107,7 @@
         <!-- class -->
         <li class="nav-item">
           <div
-            routerLink="/addclass"
+            routerLink="/addsubject"
             class="nav-link"
             (click)="toggleClassesSubmenu()"
           >
@@ -119,6 +119,16 @@
             ></i>
           </div>
           <ul class="submenu" [ngClass]="{ active: isClassOpen }">
+            <li class="sub-item">
+              <div
+                class="sub-link"
+                routerLink="/addsubject"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-book sub-icon"></i>
+                <span class="sub-text">{{ getTranslation("add_subject") }}</span>
+              </div>
+            </li>
             <li class="sub-item">
               <div
                 class="sub-link"
@@ -183,7 +193,7 @@
           </button>
         </div>
       </div>
-      <button class="logout-btn">{{ getTranslation("logout") }}</button>
+      <button class="logout-btn" (click)="logout()">{{ getTranslation("logout") }}</button>
     </div>
   </div>
 

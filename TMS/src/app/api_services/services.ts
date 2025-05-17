@@ -4,6 +4,18 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { Student } from '../models/student.model';
 import { Teacher } from '../models/teacher.model';
 
+export interface StatsCounts {
+  students: number;
+  teachers: number;
+  subjects: number;
+  classes: number;
+  enrollments: number;
+  teacher_assignments: number;
+  payments: number;
+  attendance: number;
+  grades: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -197,6 +209,25 @@ export class ApiService {
         catchError((error) => {
           console.error('Error deleting teacher:', error);
           return throwError(() => new Error('Failed to delete teacher'));
+        })
+      );
+  }
+
+  getStatsCounts(): Observable<StatsCounts> {
+    const username = this.getUsername();
+    if (!username) {
+      return throwError(() => new Error('Username not found in local storage'));
+    }
+    return this.http
+      .get<StatsCounts>(`${this.baseUrl}/stats/counts?username=${encodeURIComponent(username)}`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching stats counts:', error);
+          return throwError(() => new Error('Failed to fetch stats counts'));
         })
       );
   }
