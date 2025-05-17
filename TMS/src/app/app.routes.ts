@@ -11,6 +11,8 @@ import { AllClassesComponent } from './all-classes/all-classes.component';
 import { StuEnrollComponent } from './stu-enroll/stu-enroll.component';
 import { Subject } from 'rxjs';
 import { SubjectComponent } from './subject/subject.component';
+import { PaymentComponent } from './payment/payment.component';
+import { PaymentDetailsComponent } from './payment-details/payment-details.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent }, 
@@ -34,6 +36,10 @@ export const routes: Routes = [
       { path: 'addclass', component: AddClassComponent },
       { path: 'allclasses', component: AllClassesComponent},
       { path: 'stu_enroll', component: StuEnrollComponent},
+      { path: 'payment', component: PaymentComponent},
+      { path: 'paymentdetails', component: PaymentDetailsComponent},
+
+
 
 
 

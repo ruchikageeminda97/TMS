@@ -24,11 +24,28 @@ export interface Subject {
   level: string;
 }
 
+interface Payment {
+  
+  student_id: string;
+  class_id: string;
+  amount: number;
+  payment_date: string;
+  month: string;
+  year: string;
+  status: string;
+}
+
+
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl: string = 'http://127.0.0.1:8001';
+ 
+
+  // Base URL for the API
+  private baseUrl: string = 'http://127.0.0.1:8000';
+
+
 
   constructor(private http: HttpClient) {}
 
@@ -331,6 +348,17 @@ export class ApiService {
       throw new Error('Day not found in local storage');
     }
     return this.http.get<{ today_classes: any[], date: string }>(`${this.baseUrl}/stats/today-classes?day=${day}`);
+  }
+
+  makePayment(payment: Payment, username: string): Observable<{ success: boolean, message?: string }> {
+    return this.http.post<{ success: boolean, message?: string }>(
+      `${this.baseUrl}/payments?username=${username}`,
+      payment 
+    );
+  }
+
+  getPayments(username: string): Observable<Payment[]> {
+    return this.http.get<Payment[]>(`${this.baseUrl}/payments?username=${username}`);
   }
 }
 

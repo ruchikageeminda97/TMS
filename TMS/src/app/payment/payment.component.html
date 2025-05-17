@@ -1,1 +1,71 @@
-<p>payment works!</p>
+<div class="content-area">
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-center animate-title mb-0">Record Payment</h2>
+    </div>
+    <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="p-4 bg-white rounded shadow animate-form">
+      <div class="row">
+        <!-- Student ID -->
+        <div class="col-md-6 mb-3">
+          <label for="studentId" class="form-label">Student</label>
+          <select id="studentId" formControlName="studentId" class="form-select animate-input" [class.is-invalid]="paymentForm.get('studentId')?.invalid && paymentForm.get('studentId')?.touched">
+            <option value="" disabled>Select a student</option>
+            <option *ngFor="let student of students" [value]="student.student_id">{{ getStudentName(student) }}</option>
+          </select>
+          <div *ngIf="paymentForm.get('studentId')?.invalid && paymentForm.get('studentId')?.touched" class="text-danger animate-error">
+            Please select a student
+          </div>
+        </div>
+
+        <!-- Class ID -->
+        <div class="col-md-6 mb-3">
+          <label for="classId" class="form-label">Class</label>
+          <select id="classId" formControlName="classId" class="form-select animate-input" [class.is-invalid]="paymentForm.get('classId')?.invalid && paymentForm.get('classId')?.touched">
+            <option value="" disabled>Select a class</option>
+            <option *ngFor="let class of classes" [value]="class.class_id">{{ class.class_name }}</option>
+          </select>
+          <div *ngIf="paymentForm.get('classId')?.invalid && paymentForm.get('classId')?.touched" class="text-danger animate-error">
+            Please select a class
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Month -->
+        <div class="col-md-6 mb-3">
+          <label for="month" class="form-label">Month</label>
+          <select id="month" formControlName="month" class="form-select animate-input" [class.is-invalid]="paymentForm.get('month')?.invalid && paymentForm.get('month')?.touched">
+            <option value="" disabled>Select a month</option>
+            <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+          </select>
+          <div *ngIf="paymentForm.get('month')?.invalid && paymentForm.get('month')?.touched" class="text-danger animate-error">
+            Please select a month
+          </div>
+        </div>
+
+        <!-- Year -->
+        <div class="col-md-6 mb-3">
+          <label for="year" class="form-label">Year</label>
+          <input type="number" id="year" formControlName="year" class="form-control animate-input" placeholder="e.g., 2025" [class.is-invalid]="paymentForm.get('year')?.invalid && paymentForm.get('year')?.touched">
+          <div *ngIf="paymentForm.get('year')?.invalid && paymentForm.get('year')?.touched" class="text-danger animate-error">
+            Please enter a valid 4-digit year
+          </div>
+        </div>
+      </div>
+
+      <!-- Amount -->
+      <div class="mb-3">
+        <label for="amount" class="form-label">Amount</label>
+        <input type="number" id="amount" formControlName="amount" class="form-control animate-input" placeholder="e.g., 500" [class.is-invalid]="paymentForm.get('amount')?.invalid && paymentForm.get('amount')?.touched">
+        <div *ngIf="paymentForm.get('amount')?.invalid && paymentForm.get('amount')?.touched" class="text-danger animate-error">
+          Please enter a valid amount (greater than 0)
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary animate-button" [disabled]="paymentForm.invalid">Submit Payment</button>
+      </div>
+    </form>
+  </div>
+</div>

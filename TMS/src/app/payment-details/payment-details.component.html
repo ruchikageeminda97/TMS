@@ -1,0 +1,50 @@
+<div class="content-area">
+  <div class="container mt-4">
+    <h2 class="text-center animate-title mb-4">Payment Details</h2>
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="p-4 bg-white rounded shadow animate-form">
+      <div class="row">
+        <div class="col-md-6 mb-3 position-relative">
+          <label for="searchInput" class="form-label">Search Student by First Name</label>
+          <input
+            type="text"
+            id="searchInput"
+            formControlName="searchInput"
+            class="form-control animate-input"
+            placeholder="Enter student first name"
+            [class.is-invalid]="searchForm.get('searchInput')?.invalid && searchForm.get('searchInput')?.touched"
+            autocomplete="off"
+          >
+          <div
+            *ngIf="searchForm.get('searchInput')?.invalid && searchForm.get('searchInput')?.touched"
+            class="text-danger animate-error"
+          >
+            Please enter a student name
+          </div>
+          <div class="dropdown mt-1" *ngIf="(filteredStudents | async) as students; else noStudents">
+            <ng-container *ngIf="searchForm.get('searchInput')?.value && students.length">
+              <ul class="list-group animate-suggestions">
+                <li
+                  *ngFor="let student of students"
+                  class="list-group-item list-group-item-action"
+                  (click)="selectStudent(student)"
+                >
+                  {{ getStudentName(student) }} (ID: {{ student.student_id }})
+                </li>
+              </ul>
+            </ng-container>
+          </div>
+          <ng-template #noStudents></ng-template>
+        </div>
+      </div>
+      <div class="text-center">
+        <button
+          type="submit"
+          class="btn btn-primary animate-button"
+          [disabled]="searchForm.invalid && !selectedStudent"
+        >
+          Search
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

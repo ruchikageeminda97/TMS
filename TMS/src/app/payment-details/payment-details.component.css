@@ -91,8 +91,8 @@ form {
 }
 
 .animate-button {
-  padding: 12px 30px;
-  font-size: 1rem;
+  padding: 10px 20px; /* Smaller than PaymentComponent’s 12px 30px */
+  font-size: 0.95rem; /* Smaller than PaymentComponent’s 1rem */
   font-weight: 500;
   background-color: #4a90e2;
   transition: all 0.3s ease;
@@ -129,7 +129,7 @@ form {
   }
 
   .animate-button {
-    padding: 10px 20px;
+    padding: 8px 15px;
     font-size: 0.9rem;
   }
 }
