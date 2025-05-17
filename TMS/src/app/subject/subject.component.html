@@ -1,1 +1,126 @@
-<p>subject works!</p>
+<div class="content-area">
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-center animate-title mb-0">
+        {{ getTranslation("add_subject") }}
+      </h2>
+    </div>
+    <form
+      #subjectForm="ngForm"
+      (ngSubmit)="onSubmit()"
+      class="p-4 bg-white rounded shadow animate-form"
+    >
+      <div class="row">
+        <!-- Subject ID -->
+        <div class="col-md-6 mb-3">
+          <label for="subject_id" class="form-label">{{
+            getTranslation("Subject_id")
+          }}</label>
+          <input
+            type="text"
+            id="subject_id"
+            name="subject_id"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_subject_id')"
+            [(ngModel)]="subject.subject_id"
+            required
+            pattern="[A-Za-z0-9_]+"
+          />
+          <div
+            *ngIf="
+              subjectForm.controls['subject_id']?.invalid &&
+              subjectForm.controls['subject_id']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_subject_id") }}
+          </div>
+        </div>
+
+        <!-- Subject Name -->
+        <div class="col-md-6 mb-3">
+          <label for="subject_name" class="form-label">{{
+            getTranslation("Subject_name")
+          }}</label>
+          <input
+            type="text"
+            id="subject_name"
+            name="subject_name"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_subject_name')"
+            [(ngModel)]="subject.subject_name"
+            required
+            pattern="[A-Za-z ]+"
+          />
+          <div
+            *ngIf="
+              subjectForm.controls['subject_name']?.invalid &&
+              subjectForm.controls['subject_name']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_subject_name") }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Description -->
+        <div class="col-md-6 mb-3">
+          <label for="description" class="form-label">{{
+            getTranslation("Description")
+          }}</label>
+          <input
+            type="text"
+            id="description"
+            name="description"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_description')"
+            [(ngModel)]="subject.description"
+          />
+        </div>
+
+        <!-- Level -->
+        <div class="col-md-6 mb-3">
+          <label for="level" class="form-label">{{
+            getTranslation("Level")
+          }}</label>
+          <select
+            id="level"
+            name="level"
+            class="form-select animate-input"
+            [(ngModel)]="subject.level"
+            required
+          >
+            <option value="" disabled selected>
+              {{ getTranslation("select_level") }}
+            </option>
+            <option value="Beginner">{{ getTranslation("beginner") }}</option>
+            <option value="Intermediate">{{ getTranslation("intermediate") }}</option>
+            <option value="Advanced">{{ getTranslation("advanced") }}</option>
+          </select>
+          <div
+            *ngIf="
+              subjectForm.controls['level']?.invalid &&
+              subjectForm.controls['level']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_level") }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button
+          type="submit"
+          class="btn btn-primary animate-button"
+          [disabled]="subjectForm.invalid"
+        >
+          {{ getTranslation("add_subject") }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -7,166 +7,121 @@
     </div>
     <form
       #classForm="ngForm"
-      (ngSubmit)="onSubmit(classForm)"
+      (ngSubmit)="onSubmit()"
       class="p-4 bg-white rounded shadow animate-form"
     >
       <div class="row">
+        <!-- Class ID -->
+        <div class="col-md-6 mb-3">
+          <label for="class_id" class="form-label">{{
+            getTranslation("class_id")
+          }}</label>
+          <input
+            type="text"
+            id="class_id"
+            name="class_id"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_class_id')"
+            [(ngModel)]="class.class_id"
+            required
+            pattern="[A-Za-z0-9_]+"
+          />
+          <div
+            *ngIf="
+              classForm.controls['class_id']?.invalid &&
+              classForm.controls['class_id']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_class_id") }}
+          </div>
+        </div>
+
         <!-- Class Name -->
         <div class="col-md-6 mb-3">
-          <label for="className" class="form-label">{{
+          <label for="class_name" class="form-label">{{
             getTranslation("class_name")
           }}</label>
           <input
             type="text"
-            id="className"
-            name="className"
+            id="class_name"
+            name="class_name"
             class="form-control animate-input"
             [placeholder]="getTranslation('enter_class_name')"
-            [(ngModel)]="class.className"
+            [(ngModel)]="class.class_name"
             required
             pattern="[A-Za-z0-9\s]+"
           />
           <div
             *ngIf="
-              classForm.controls['className']?.invalid &&
-              classForm.controls['className']?.touched
+              classForm.controls['class_name']?.invalid &&
+              classForm.controls['class_name']?.touched
             "
             class="text-danger animate-error"
           >
             {{ getTranslation("invalid_class_name") }}
           </div>
         </div>
-
-        <!-- Teacher ID -->
-        <div class="col-md-6 mb-3">
-          <label for="teacherID" class="form-label">{{
-            getTranslation("teacher_id")
-          }}</label>
-          <input
-            type="text"
-            id="teacherID"
-            name="teacherID"
-            class="form-control animate-input"
-            [placeholder]="getTranslation('enter_teacher_id')"
-            [(ngModel)]="class.teacherID"
-            required
-            pattern="[A-Za-z0-9]+"
-          />
-          <div
-            *ngIf="
-              classForm.controls['teacherID']?.invalid &&
-              classForm.controls['teacherID']?.touched
-            "
-            class="text-danger animate-error"
-          >
-            {{ getTranslation("invalid_teacher_id") }}
-          </div>
-        </div>
       </div>
 
       <div class="row">
-        <!-- Teacher Name -->
-        <div class="col-md-6 mb-3">
-          <label for="teacherName" class="form-label">{{
-            getTranslation("teacher_name")
-          }}</label>
-          <input
-            type="text"
-            id="teacherName"
-            name="teacherName"
-            class="form-control animate-input"
-            [placeholder]="getTranslation('enter_teacher_name')"
-            [(ngModel)]="class.teacherName"
-            required
-            pattern="[A-Za-z\s]+"
-          />
-          <div
-            *ngIf="
-              classForm.controls['teacherName']?.invalid &&
-              classForm.controls['teacherName']?.touched
-            "
-            class="text-danger animate-error"
-          >
-            {{ getTranslation("invalid_teacher_name") }}
-          </div>
-        </div>
-
         <!-- Subject -->
         <div class="col-md-6 mb-3">
-          <label for="subject" class="form-label">{{
+          <label for="subject_id" class="form-label">{{
             getTranslation("subject")
           }}</label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            class="form-control animate-input"
-            [placeholder]="getTranslation('enter_subject')"
-            [(ngModel)]="class.subject"
+          <select
+            id="subject_id"
+            name="subject_id"
+            class="form-select animate-input"
+            [(ngModel)]="class.subject_id"
             required
-            pattern="[A-Za-z\s]+"
-          />
+          >
+            <option value="" disabled selected>
+              {{ getTranslation("select_subject") }}
+            </option>
+            <option *ngFor="let subject of subjects" [value]="subject.subject_id">
+              {{ subject.subject_name }}
+            </option>
+          </select>
           <div
             *ngIf="
-              classForm.controls['subject']?.invalid &&
-              classForm.controls['subject']?.touched
+              classForm.controls['subject_id']?.invalid &&
+              classForm.controls['subject_id']?.touched
             "
             class="text-danger animate-error"
           >
             {{ getTranslation("invalid_subject") }}
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <!-- Date -->
+        <!-- Day -->
         <div class="col-md-6 mb-3">
-          <label for="date" class="form-label">{{
-            getTranslation("date")
+          <label for="day" class="form-label">{{
+            getTranslation("day")
           }}</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            class="form-control animate-input"
-            [(ngModel)]="class.date"
+          <select
+            id="day"
+            name="day"
+            class="form-select animate-input"
+            [(ngModel)]="class.day"
             required
-          />
+          >
+            <option value="" disabled selected>
+              {{ getTranslation("select_day") }}
+            </option>
+            <option *ngFor="let day of weekdays" [value]="day">
+              {{ day }}
+            </option>
+          </select>
           <div
             *ngIf="
-              classForm.controls['date']?.invalid &&
-              classForm.controls['date']?.touched
+              classForm.controls['day']?.invalid &&
+              classForm.controls['day']?.touched
             "
             class="text-danger animate-error"
           >
-            {{ getTranslation("invalid_date") }}
-          </div>
-        </div>
-
-        <!-- Fee -->
-        <div class="col-md-6 mb-3">
-          <label for="fee" class="form-label">{{
-            getTranslation("fee")
-          }}</label>
-          <input
-            type="number"
-            id="fee"
-            name="fee"
-            class="form-control animate-input"
-            [placeholder]="getTranslation('enter_fee')"
-            [(ngModel)]="class.fee"
-            required
-            min="0"
-            step="0.01"
-          />
-          <div
-            *ngIf="
-              classForm.controls['fee']?.invalid &&
-              classForm.controls['fee']?.touched
-            "
-            class="text-danger animate-error"
-          >
-            {{ getTranslation("invalid_fee") }}
+            {{ getTranslation("invalid_day") }}
           </div>
         </div>
       </div>
@@ -174,21 +129,21 @@
       <div class="row">
         <!-- Start Time -->
         <div class="col-md-6 mb-3">
-          <label for="startTime" class="form-label">{{
+          <label for="start_time" class="form-label">{{
             getTranslation("start_time")
           }}</label>
           <input
             type="time"
-            id="startTime"
-            name="startTime"
+            id="start_time"
+            name="start_time"
             class="form-control animate-input"
-            [(ngModel)]="startTime"
+            [(ngModel)]="class.start_time"
             required
           />
           <div
             *ngIf="
-              classForm.controls['startTime']?.invalid &&
-              classForm.controls['startTime']?.touched
+              classForm.controls['start_time']?.invalid &&
+              classForm.controls['start_time']?.touched
             "
             class="text-danger animate-error"
           >
@@ -198,25 +153,80 @@
 
         <!-- End Time -->
         <div class="col-md-6 mb-3">
-          <label for="endTime" class="form-label">{{
+          <label for="end_time" class="form-label">{{
             getTranslation("end_time")
           }}</label>
           <input
             type="time"
-            id="endTime"
-            name="endTime"
+            id="end_time"
+            name="end_time"
             class="form-control animate-input"
-            [(ngModel)]="endTime"
+            [(ngModel)]="class.end_time"
             required
           />
           <div
             *ngIf="
-              classForm.controls['endTime']?.invalid &&
-              classForm.controls['endTime']?.touched
+              classForm.controls['end_time']?.invalid &&
+              classForm.controls['end_time']?.touched
             "
             class="text-danger animate-error"
           >
             {{ getTranslation("invalid_end_time") }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Room Number -->
+        <div class="col-md-6 mb-3">
+          <label for="room_number" class="form-label">{{
+            getTranslation("room_number")
+          }}</label>
+          <input
+            type="text"
+            id="room_number"
+            name="room_number"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_room_number')"
+            [(ngModel)]="class.room_number"
+            required
+            pattern="[A-Za-z0-9-]+"
+          />
+          <div
+            *ngIf="
+              classForm.controls['room_number']?.invalid &&
+              classForm.controls['room_number']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_room_number") }}
+          </div>
+        </div>
+
+        <!-- Capacity -->
+        <div class="col-md-6 mb-3">
+          <label for="capacity" class="form-label">{{
+            getTranslation("capacity")
+          }}</label>
+          <input
+            type="number"
+            id="capacity"
+            name="capacity"
+            class="form-control animate-input"
+            [placeholder]="getTranslation('enter_capacity')"
+            [(ngModel)]="class.capacity"
+            required
+            min="0"
+            step="1"
+          />
+          <div
+            *ngIf="
+              classForm.controls['capacity']?.invalid &&
+              classForm.controls['capacity']?.touched
+            "
+            class="text-danger animate-error"
+          >
+            {{ getTranslation("invalid_capacity") }}
           </div>
         </div>
       </div>

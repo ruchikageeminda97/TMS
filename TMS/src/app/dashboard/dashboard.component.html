@@ -30,7 +30,7 @@
     <!-- First section: Chart -->
     <div class="future-section" style="flex: 0 0 59%">
       <div class="chart-container">
-        <h3 class="chart-title">Last 7 Days Income</h3>
+        <h3 class="chart-title">{{ getTranslation("last_7_days_income") }}</h3>
         <div class="chart-wrapper">
           <div class="y-axis">
             <span
@@ -60,22 +60,22 @@
     <!-- Second section: Table -->
     <div class="future-section" style="flex: 0 0 39%">
       <div class="table-container">
-        <h3 class="table-title">Today's Classes</h3>
+        <h3 class="table-title">{{ getTranslation("today_classes") }}</h3>
         <table class="classes-table">
           <thead>
             <tr>
-              <th>Class Name</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Teacher Name</th>
+              <th>{{ getTranslation("class_name") }}</th>
+              <th>{{ getTranslation("start_time") }}</th>
+              <th>{{ getTranslation("end_time") }}</th>
+              <th>{{ getTranslation("room_number") }}</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let class of classes">
-              <td>{{ class.className }}</td>
+              <td >{{ class.className }}</td>
               <td>{{ class.startTime }}</td>
               <td>{{ class.endTime }}</td>
-              <td>{{ class.teacherName }}</td>
+              <td >{{ class.roomNumber }}</td>
             </tr>
           </tbody>
         </table>

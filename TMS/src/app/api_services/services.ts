@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Student } from '../models/student.model';
 import { Teacher } from '../models/teacher.model';
+import { Class } from '../models/class.model';
 
 export interface StatsCounts {
   students: number;
@@ -14,6 +15,13 @@ export interface StatsCounts {
   payments: number;
   attendance: number;
   grades: number;
+}
+
+export interface Subject {
+  subject_id: string;
+  subject_name: string;
+  description: string;
+  level: string;
 }
 
 @Injectable({
@@ -231,4 +239,99 @@ export class ApiService {
         })
       );
   }
+
+  addSubject(subject: Subject): Observable<any> {
+    const username = this.getUsername();
+    if (!username) {
+      return throwError(() => new Error('Username not found in local storage'));
+    }
+    const subjectJson = JSON.stringify(subject);
+    return this.http
+      .post(`${this.baseUrl}/subjects/?username=${encodeURIComponent(username)}`, subjectJson, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Error adding subject:', error);
+          return throwError(() => new Error('Failed to add subject'));
+        })
+      );
+  }
+
+  // getSubjects(): Observable<Subject[]> {
+  //   const username = this.getUsername();
+  //   if (!username) {
+  //     return throwError(() => new Error('Username not found in local storage'));
+  //   }
+  //   return this.http
+  //     .get<Subject[]>(`${this.baseUrl}/subjects/?username=${encodeURIComponent(username)}`, {
+  //       headers: new HttpHeaders({
+  //         'Content-Type': 'application/json',
+  //       }),
+  //     })
+  //     .pipe(
+  //       catchError((error) => {
+  //         console.error('Error fetching subjects:', error);
+  //         return throwError(() => new Error('Failed to fetch subjects'));
+  //       })
+  //     );
+  // }
+
+  addClass(classData: Class): Observable<any> {
+    const username = this.getUsername();
+    if (!username) {
+      return throwError(() => new Error('Username not found in local storage'));
+    }
+    const classJson = JSON.stringify(classData);
+    return this.http
+      .post(`${this.baseUrl}/classes/?username=${encodeURIComponent(username)}`, classJson, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Error adding class:', error);
+          return throwError(() => new Error('Failed to add class'));
+        })
+      );
+  }
+    getSubjects(): Observable<any> {
+    const username = this.getUsername();
+    if (!username) {
+      return throwError(() => new Error('Username not found in local storage'));
+    }
+    return this.http
+      .get<any>(`${this.baseUrl}/subjects/?username=${encodeURIComponent(username)}`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      })
+      .pipe(
+        catchError((error) => {
+          return throwError(() => new Error('Failed to fetch stats counts'));
+        })
+      );
+  }
+
+  getClasses(): Observable<Class[]> {
+    const username = localStorage.getItem('username');
+    if (!username) {
+      throw new Error('Username not found in local storage');
+    }
+    return this.http.get<Class[]>(`${this.baseUrl}/classes/?username=${username}`);
+  }
+
+  // getTodayClasses
+  getTodayClasses(): Observable<{ today_classes: any[], date: string }> {
+    const day = localStorage.getItem('day');
+    if (!day) {
+      throw new Error('Day not found in local storage');
+    }
+    return this.http.get<{ today_classes: any[], date: string }>(`${this.baseUrl}/stats/today-classes?day=${day}`);
+  }
 }
+
+ 

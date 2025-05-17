@@ -3,6 +3,14 @@ import { NgFor } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LanguageService } from '../language.service';
 import { ApiService, StatsCounts } from '../api_services/services';
+import { Class } from '../models/class.model';
+
+interface ClassDisplay {
+  className: string;
+  startTime: string;
+  endTime: string;
+  roomNumber: string;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -12,8 +20,8 @@ import { ApiService, StatsCounts } from '../api_services/services';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  studentCount: number = 0; 
-  teacherCount: number = 0; 
+  studentCount: number = 0;
+  teacherCount: number = 0;
   classCount: number = 0;
   todayIncome: string = 'LKR 500';
   ongoingClasses: number = 1;
@@ -28,14 +36,7 @@ export class DashboardComponent implements OnInit {
     { date: 'Apr 12', income: 12500 }
   ];
 
-  classes = [
-    { className: 'Mathematics', startTime: '09:00 AM', endTime: '10:00 AM', teacherName: 'Mr. Smith' },
-    { className: 'Physics', startTime: '10:15 AM', endTime: '11:15 AM', teacherName: 'Ms. Johnson' },
-    { className: 'Chemistry', startTime: '11:30 AM', endTime: '12:30 PM', teacherName: 'Dr. Brown' },
-    { className: 'Biology', startTime: '01:00 PM', endTime: '02:00 PM', teacherName: 'Mrs. Davis' },
-    { className: 'English', startTime: '02:15 PM', endTime: '03:15 PM', teacherName: 'Mr. Wilson' },
-    { className: 'History', startTime: '03:30 PM', endTime: '04:30 PM', teacherName: 'Ms. Taylor' }
-  ];
+  classes: ClassDisplay[] = [];
 
   yAxisMax!: number;
   yAxisLabels: { value: number; position: number }[] = [];
@@ -50,6 +51,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchStats();
+    this.fetchTodayClasses();
   }
 
   getTranslation(key: string): string {
@@ -72,6 +74,33 @@ export class DashboardComponent implements OnInit {
         this.showSnackBar(this.getTranslation('fetch_stats_failed'));
       }
     });
+  }
+
+  private fetchTodayClasses(): void {
+    this.apiService.getTodayClasses().subscribe({
+      next: (response) => {
+        console.log('Fetched today classes:', response);
+        this.classes = response.today_classes.map(cls => ({
+          className: cls.class_name,
+          startTime: this.formatTime(cls.start_time),
+          endTime: this.formatTime(cls.end_time),
+          roomNumber: cls.room_number || 'N/A'
+        }));
+        this.ongoingClasses = response.today_classes.filter(cls => cls.status === 'Ongoing').length;
+      },
+      error: (err) => {
+        console.error('Error fetching today classes:', err);
+        this.showSnackBar(this.getTranslation('fetch_classes_failed'));
+      }
+    });
+  }
+
+  private formatTime(time: string): string {
+    // Convert HH:MM to HH:MM AM/PM
+    const [hours, minutes] = time.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const adjustedHours = hours % 12 || 12;
+    return `${adjustedHours}:${minutes.toString().padStart(2, '0')} ${period}`;
   }
 
   getBarHeight(income: number): number {

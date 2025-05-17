@@ -2,21 +2,20 @@
   <div class="container mt-4">
     <h2 class="text-center mb-4 animate-title">
       {{ getTranslation("all_classes") }}
-      <!-- Corrected title -->
     </h2>
     <div class="table-responsive animate-table">
       <table class="table table-striped table-hover">
         <thead class="thead-dark">
           <tr>
-            <th>{{ getTranslation("class_id") }}</th>
-            <th>{{ getTranslation("class_name") }}</th>
-            <th>{{ getTranslation("teacher_id") }}</th>
-            <th>{{ getTranslation("teacher_name") }}</th>
-            <th>{{ getTranslation("date") }}</th>
-            <th>{{ getTranslation("start_time") }}</th>
-            <th>{{ getTranslation("subject") }}</th>
-            <th>{{ getTranslation("fee") }}</th>
-            <th>{{ getTranslation("student_count") }}</th>
+            <th>{{ getTranslation("Class Id") }}</th>
+            <th>{{ getTranslation("Class Name") }}</th>
+            <th>{{ getTranslation("Subject") }}</th>
+            <th>{{ getTranslation("Day") }}</th>
+            <th>{{ getTranslation("Start Time") }}</th>
+            <th>{{ getTranslation("End Time") }}</th>
+            <th>{{ getTranslation("Hall Number") }}</th>
+            <th>{{ getTranslation("capacity") }}</th>
+            <!-- <th>{{ getTranslation("status") }}</th> -->
             <th>{{ getTranslation("actions") }}</th>
           </tr>
         </thead>
@@ -26,15 +25,15 @@
             class="animate-row"
             style="--row-index: {{ i }}"
           >
-            <td>{{ class.ClassID }}</td>
-            <td>{{ class.className }}</td>
-            <td>{{ class.teacherID }}</td>
-            <td>{{ class.teacherName }}</td>
-            <td>{{ class.date }}</td>
-            <td>{{ class.time }}</td>
-            <td>{{ class.subject }}</td>
-            <td>{{ class.fee ? class.fee + " LKR" : "N/A" }}</td>
-            <td>{{ class.student.length }}</td>
+            <td>{{ class.class_id }}</td>
+            <td>{{ class.class_name }}</td>
+            <td>{{ class.subject_id }}</td>
+            <td>{{ class.day }}</td>
+            <td>{{ class.start_time }}</td>
+            <td>{{ class.end_time }}</td>
+            <td>{{ class.room_number }}</td>
+            <td>{{ class.capacity }}</td>
+            <!-- <td>{{ class.status }}</td> -->
             <td style="display: flex">
               <button
                 class="btn btn-sm btn-primary me-2 animate-button"
