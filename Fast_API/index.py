@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 # Initialize FastAPI app
 app = FastAPI(
     title="Tuition Class Management System (TCMS)",
-    description="API for managing students, tutors, classes, subjects, enrollments, teacher assignments, payments, attendance, and grades in a tuition center.",
+    description="API for managing students, tutors, classes, subjects, teacher assignments, payments, attendance, and grades in a tuition center.",
     version="1.0",
     openapi_tags=[
         {"name": "Auth", "description": "User authentication and registration."},
@@ -27,7 +27,6 @@ app = FastAPI(
         {"name": "Teachers", "description": "Teacher management."},
         {"name": "Subjects", "description": "Subject management."},
         {"name": "Classes", "description": "Class management."},
-        {"name": "Enrollments", "description": "Enrollment management."},
         {"name": "TeacherAssignments", "description": "Teacher assignment management."},
         {"name": "Payments", "description": "Payment management."},
         {"name": "Attendance", "description": "Attendance management."},
@@ -151,13 +150,6 @@ class Class(BaseModel):
     capacity: int
     status: ClassStatus = ClassStatus.ongoing
 
-class Enrollment(BaseModel):
-    enrollment_id: str
-    student_id: str
-    class_id: str
-    enrollment_date: date
-    payment_status: PaymentStatus = PaymentStatus.pending
-
 class TeacherAssignment(BaseModel):
     assignment_id: str
     teacher_id: str
@@ -166,9 +158,12 @@ class TeacherAssignment(BaseModel):
 
 class Payment(BaseModel):
     payment_id: str
-    enrollment_id: str
+    student_id: str
+    class_id: str
     amount: float
     payment_date: date
+    month: str
+    year: str
     status: PaymentStatus = PaymentStatus.paid
 
 class Attendance(BaseModel):
@@ -225,7 +220,6 @@ async def get_entity_counts(username: str):
             "teachers": await db.teachers.count_documents({}),
             "subjects": await db.subjects.count_documents({}),
             "classes": await db.classes.count_documents({}),
-            "enrollments": await db.enrollments.count_documents({}),
             "teacher_assignments": await db.teacher_assignments.count_documents({}),
             "payments": await db.payments.count_documents({}),
             "attendance": await db.attendance.count_documents({}),
@@ -264,8 +258,6 @@ async def get_today_classes(day: str):
     try:
         classes = await db.classes.find({"day": day, "status": ClassStatus.ongoing}).to_list(length=None)
         for class_ in classes:
-            # Fetch enrollments for each class
-            class_["enrollments"] = await db.enrollments.find({"class_id": class_["class_id"]}).to_list(length=None)
             # Fetch attendance for each class (for today)
             class_["attendance"] = await db.attendance.find({"class_id": class_["class_id"], "date": get_today()}).to_list(length=None)
             # Fetch teacher assignment for each class
@@ -821,133 +813,42 @@ async def list_classes(username: str):
         logger.error(f"Classes retrieval error: {e}")
         raise HTTPException(status_code=500, detail="Server error")
 
-# Enrollment Management
-@app.post("/enrollments/", tags=["Enrollments"], response_model=Enrollment)
-async def enroll_student_in_class(enrollment: Enrollment, username: str):
-    """Enroll a student in a class"""
+@app.get("/classes/{class_id}/students-and-teacher", tags=["Classes"], response_model=dict)
+async def get_class_students_and_teacher(class_id: str, username: str):
+    """Get all students and their teacher for a specific class"""
     user = await find_user(username)
     if not user:
-        logger.error(f"Enrollment failed: User {username} not found")
+        logger.error(f"Class students and teacher retrieval failed: User {username} not found")
         raise HTTPException(status_code=401, detail="User not found")
-    if user["role"] not in [UserRole.admin, UserRole.teacher]:
-        logger.error(f"Enrollment failed: User {username} not authorized")
-        raise HTTPException(status_code=403, detail="Not authorized")
     
-    # Check if enrollment_id exists
-    if await db.enrollments.find_one({"enrollment_id": enrollment.enrollment_id}):
-        logger.error(f"Enrollment failed: Enrollment ID {enrollment.enrollment_id} already exists")
-        raise HTTPException(status_code=400, detail="Enrollment ID already exists")
-    
-    # Check if student_id exists
-    if not await db.students.find_one({"student_id": enrollment.student_id}):
-        logger.error(f"Enrollment failed: Student {enrollment.student_id} not found")
-        raise HTTPException(status_code=404, detail="Student not found")
-    
-    # Check if class_id exists and capacity
-    class_ = await db.classes.find_one({"class_id": enrollment.class_id})
+    # Check if class exists
+    class_ = await db.classes.find_one({"class_id": class_id})
     if not class_:
-        logger.error(f"Enrollment failed: Class {enrollment.class_id} not found")
+        logger.error(f"Class students and teacher retrieval failed: Class {class_id} not found")
         raise HTTPException(status_code=404, detail="Class not found")
     
-    enrolled_count = await db.enrollments.count_documents({"class_id": enrollment.class_id})
-    if enrolled_count >= class_["capacity"]:
-        logger.error(f"Enrollment failed: Class {enrollment.class_id} capacity reached")
-        raise HTTPException(status_code=400, detail="Class capacity reached")
+    # Get all attendance records for the class (across all dates) to find unique students
+    attendance = await db.attendance.find({"class_id": class_id}).to_list(length=None)
+    # Extract unique student IDs
+    student_ids = list(set(record["student_id"] for record in attendance))
     
-    enrollment_doc = enrollment.dict()
-    # Convert date to ISO string
-    enrollment_doc["enrollment_date"] = enrollment.enrollment_date.isoformat()
+    # Fetch full student records
+    students = await db.students.find({"student_id": {"$in": student_ids}}).to_list(length=None)
     
-    try:
-        await db.enrollments.insert_one(enrollment_doc)
-        logger.info(f"Enrollment created: {enrollment.enrollment_id}")
-        return enrollment
-    except Exception as e:
-        logger.error(f"Enrollment creation error: {e}")
-        raise HTTPException(status_code=500, detail="Server error")
-
-@app.get("/enrollments/", tags=["Enrollments"], response_model=List[Enrollment])
-async def list_enrollments(username: str):
-    """List all enrollments"""
-    user = await find_user(username)
-    if not user:
-        logger.error(f"Enrollments retrieval failed: User {username} not found")
-        raise HTTPException(status_code=401, detail="User not found")
+    # Fetch teacher assignment
+    teacher_assignment = await db.teacher_assignments.find_one({"class_id": class_id})
+    teacher = None
+    if teacher_assignment:
+        teacher = await db.teachers.find_one({"teacher_id": teacher_assignment["teacher_id"]})
     
-    try:
-        enrollments = await db.enrollments.find().to_list(length=None)
-        logger.info("Enrollments retrieved")
-        return enrollments
-    except Exception as e:
-        logger.error(f"Enrollments retrieval error: {e}")
-        raise HTTPException(status_code=500, detail="Server error")
-
-@app.put("/enrollments/{enrollment_id}", tags=["Enrollments"], response_model=Enrollment)
-async def update_enrollment(enrollment_id: str, enrollment: Enrollment, username: str):
-    """Update an existing enrollment"""
-    user = await find_user(username)
-    if not user:
-        logger.error(f"Enrollment update failed: User {username} not found")
-        raise HTTPException(status_code=401, detail="User not found")
-    if user["role"] not in [UserRole.admin, UserRole.teacher]:
-        logger.error(f"Enrollment update failed: User {username} not authorized")
-        raise HTTPException(status_code=403, detail="Not authorized")
+    response = {
+        "class_id": class_id,
+        "students": students,
+        "teacher": teacher
+    }
     
-    existing_enrollment = await db.enrollments.find_one({"enrollment_id": enrollment_id})
-    if not existing_enrollment:
-        logger.error(f"Enrollment update failed: Enrollment {enrollment_id} not found")
-        raise HTTPException(status_code=404, detail="Enrollment not found")
-    
-    # Check if student_id exists
-    if enrollment.student_id != existing_enrollment["student_id"] and not await db.students.find_one({"student_id": enrollment.student_id}):
-        logger.error(f"Enrollment update failed: Student {enrollment.student_id} not found")
-        raise HTTPException(status_code=404, detail="Student not found")
-    
-    # Check if class_id exists and capacity
-    class_ = await db.classes.find_one({"class_id": enrollment.class_id})
-    if not class_:
-        logger.error(f"Enrollment update failed: Class {enrollment.class_id} not found")
-        raise HTTPException(status_code=404, detail="Class not found")
-    enrolled_count = await db.enrollments.count_documents({"class_id": enrollment.class_id})
-    if enrollment.class_id != existing_enrollment["class_id"] and enrolled_count >= class_["capacity"]:
-        logger.error(f"Enrollment update failed: Class {enrollment.class_id} capacity reached")
-        raise HTTPException(status_code=400, detail="Class capacity reached")
-    
-    enrollment_doc = enrollment.dict()
-    # Convert date to ISO string
-    enrollment_doc["enrollment_date"] = enrollment.enrollment_date.isoformat()
-    
-    try:
-        await db.enrollments.update_one({"enrollment_id": enrollment_id}, {"$set": enrollment_doc})
-        logger.info(f"Enrollment updated: {enrollment_id}")
-        return enrollment
-    except Exception as e:
-        logger.error(f"Enrollment update error: {e}")
-        raise HTTPException(status_code=500, detail="Server error")
-
-@app.delete("/enrollments/{enrollment_id}", tags=["Enrollments"])
-async def delete_enrollment(enrollment_id: str, username: str):
-    """Delete an enrollment"""
-    user = await find_user(username)
-    if not user:
-        logger.error(f"Enrollment deletion failed: User {username} not found")
-        raise HTTPException(status_code=401, detail="User not found")
-    if user["role"] not in [UserRole.admin, UserRole.teacher]:
-        logger.error(f"Enrollment deletion failed: User {username} not authorized")
-        raise HTTPException(status_code=403, detail="Not authorized")
-    
-    existing_enrollment = await db.enrollments.find_one({"enrollment_id": enrollment_id})
-    if not existing_enrollment:
-        logger.error(f"Enrollment deletion failed: Enrollment {enrollment_id} not found")
-        raise HTTPException(status_code=404, detail="Enrollment not found")
-    
-    try:
-        await db.enrollments.delete_one({"enrollment_id": enrollment_id})
-        logger.info(f"Enrollment deleted: {enrollment_id}")
-        return {"message": f"Enrollment {enrollment_id} deleted successfully"}
-    except Exception as e:
-        logger.error(f"Enrollment deletion error: {e}")
-        raise HTTPException(status_code=500, detail="Server error")
+    logger.info(f"Retrieved students and teacher for class {class_id}")
+    return serialize_object_ids(response)
 
 # Teacher Assignment Management
 @app.post("/teacher-assignments/", tags=["TeacherAssignments"], response_model=TeacherAssignment)
@@ -1083,11 +984,15 @@ async def process_payment(payment: Payment, username: str):
         logger.error(f"Payment processing failed: Payment ID {payment.payment_id} already exists")
         raise HTTPException(status_code=400, detail="Payment ID already exists")
     
-    # Check if enrollment_id exists
-    enrollment = await db.enrollments.find_one({"enrollment_id": payment.enrollment_id})
-    if not enrollment:
-        logger.error(f"Payment processing failed: Enrollment {payment.enrollment_id} not found")
-        raise HTTPException(status_code=404, detail="Enrollment not found")
+    # Check if student_id exists
+    if not await db.students.find_one({"student_id": payment.student_id}):
+        logger.error(f"Payment processing failed: Student {payment.student_id} not found")
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    # Check if class_id exists
+    if not await db.classes.find_one({"class_id": payment.class_id}):
+        logger.error(f"Payment processing failed: Class {payment.class_id} not found")
+        raise HTTPException(status_code=404, detail="Class not found")
     
     payment_doc = payment.dict()
     # Convert date to ISO string
@@ -1095,11 +1000,6 @@ async def process_payment(payment: Payment, username: str):
     
     try:
         await db.payments.insert_one(payment_doc)
-        # Update enrollment payment status
-        await db.enrollments.update_one(
-            {"enrollment_id": payment.enrollment_id},
-            {"$set": {"payment_status": PaymentStatus.paid}}
-        )
         logger.info(f"Payment processed: {payment.payment_id}")
         return payment
     except Exception as e:
@@ -1138,10 +1038,15 @@ async def update_payment(payment_id: str, payment: Payment, username: str):
         logger.error(f"Payment update failed: Payment {payment_id} not found")
         raise HTTPException(status_code=404, detail="Payment not found")
     
-    # Check if enrollment_id exists
-    if payment.enrollment_id != existing_payment["enrollment_id"] and not await db.enrollments.find_one({"enrollment_id": payment.enrollment_id}):
-        logger.error(f"Payment update failed: Enrollment {payment.enrollment_id} not found")
-        raise HTTPException(status_code=404, detail="Enrollment not found")
+    # Check if student_id exists
+    if payment.student_id != existing_payment["student_id"] and not await db.students.find_one({"student_id": payment.student_id}):
+        logger.error(f"Payment update failed: Student {payment.student_id} not found")
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    # Check if class_id exists
+    if payment.class_id != existing_payment["class_id"] and not await db.classes.find_one({"class_id": payment.class_id}):
+        logger.error(f"Payment update failed: Class {payment.class_id} not found")
+        raise HTTPException(status_code=404, detail="Class not found")
     
     payment_doc = payment.dict()
     # Convert date to ISO string
@@ -1149,12 +1054,6 @@ async def update_payment(payment_id: str, payment: Payment, username: str):
     
     try:
         await db.payments.update_one({"payment_id": payment_id}, {"$set": payment_doc})
-        # Update enrollment payment status if changed
-        if payment.status == PaymentStatus.paid and existing_payment["status"] != PaymentStatus.paid:
-            await db.enrollments.update_one(
-                {"enrollment_id": payment.enrollment_id},
-                {"$set": {"payment_status": PaymentStatus.paid}}
-            )
         logger.info(f"Payment updated: {payment_id}")
         return payment
     except Exception as e:
