@@ -1,32 +1,32 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { NgClass, NgIf } from '@angular/common';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Teacher } from '../models/teacher.model';
 import { LanguageService } from '../language.service';
 import { TeacherLanguageService } from '../languages/teacher.language';
-import { NgClass, NgIf } from '@angular/common';
+import { ApiService } from '../api_services/services';
 
 @Component({
   selector: 'app-add-teacher',
   standalone: true,
-  imports: [FormsModule,NgClass,NgIf],
+  imports: [FormsModule, NgClass, NgIf, MatSnackBarModule],
   templateUrl: './add-teacher.component.html',
   styleUrls: ['./add-teacher.component.css']
 })
 export class AddTeacherComponent {
   @ViewChild('teacherForm') teacherForm!: NgForm;
 
-  // Static array to store teachers
-  private teachers: Teacher[] = [];
-
   teacher: Teacher = {
-    teacherID: '', // API would generate this; keeping it empty for now
-    firstName: '',
-    lastName: '',
-    gender: '',
-    contactNumber: '',
+    teacher_id: '',
+    first_name: '',
+    last_name: '',
+    contact_number: '',
+    email: '',
     address: '',
-    subject: '',
-    educationLevel: ''
+    hire_date: '',
+    specialization: '',
+    status: 'Active'
   };
 
   isImportModalOpen = false;
@@ -35,33 +35,48 @@ export class AddTeacherComponent {
 
   constructor(
     public languageService: LanguageService,
-    public teacherLanguageService: TeacherLanguageService
+    public teacherLanguageService: TeacherLanguageService,
+    private apiService: ApiService,
+    private snackBar: MatSnackBar
   ) {
-    // Sync language with sidebar toggle
     this.languageService.language$.subscribe(language => {
       this.teacherLanguageService.setLanguage(language);
     });
   }
 
+  getTranslation(key: string): string {
+    return this.teacherLanguageService.getTranslation(key);
+  }
+
+  private showSnackBar(message: string, action: string = 'Close', duration: number = 3000): void {
+    this.snackBar.open(message, action, { duration, verticalPosition: 'bottom' });
+  }
+
   onSubmit(): void {
     if (this.teacherForm.valid) {
-      // Add teacher to static array
-      this.teachers.push({ ...this.teacher });
-      console.log('Teacher Added to Static Array:', this.teacher);
-      console.log('Current Teachers List:', this.teachers);
-
-      // Reset the form
-      this.teacherForm.resetForm();
-      this.teacher = {
-        teacherID: '',
-        firstName: '',
-        lastName: '',
-        gender: '',
-        contactNumber: '',
-        address: '',
-        subject: '',
-        educationLevel: ''
-      };
+      this.apiService.addTeacher(this.teacher).subscribe({
+        next: (response) => {
+          this.showSnackBar(this.getTranslation('teacher_added_success'));
+          this.teacherForm.resetForm();
+          this.teacher = {
+            teacher_id: '',
+            first_name: '',
+            last_name: '',
+            contact_number: '',
+            email: '',
+            address: '',
+            hire_date: '',
+            specialization: '',
+            status: 'Active'
+          };
+        },
+        error: (err) => {
+          console.error('Error adding teacher:', err);
+          this.showSnackBar(this.getTranslation('teacher_add_failed'));
+        }
+      });
+    } else {
+      this.showSnackBar(this.getTranslation('teacher_add_failed'));
     }
   }
 
@@ -89,8 +104,10 @@ export class AddTeacherComponent {
     event.preventDefault();
     this.isDragging = false;
     const files = event.dataTransfer?.files;
-    if (files && files.length > 0) {
+    if (files && files.length > 0 && files[0].type === 'text/csv') {
       this.selectedFile = files[0];
+    } else {
+      this.showSnackBar(this.getTranslation('invalid_csv_file'));
     }
   }
 
@@ -103,42 +120,58 @@ export class AddTeacherComponent {
 
   importCsv(): void {
     if (this.selectedFile) {
-      // Simulate CSV import with static data
-      console.log('Simulating CSV Import for File:', this.selectedFile.name);
-
-      const importedTeachers: Teacher[] = [
-        {
-          teacherID: '', // API would generate
-          firstName: 'Alice',
-          lastName: 'Smith',
-          gender: 'Female',
-          contactNumber: '1234567890',
-          address: '123 Elm St',
-          subject: 'Science',
-          educationLevel: 'Masters'
-        },
-        {
-          teacherID: '',
-          firstName: 'Bob',
-          lastName: 'Johnson',
-          gender: 'Male',
-          contactNumber: '0987654321',
-          address: '456 Oak St',
-          subject: 'Math',
-          educationLevel: 'Degree'
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target?.result as string;
+        const teachers = this.parseCsv(text);
+        if (teachers.length > 0) {
+          this.apiService.importTeachers(teachers).subscribe({
+            next: (response) => {
+              this.showSnackBar(this.getTranslation('csv_import_success'));
+              this.closeImportModal();
+            },
+            error: (err) => {
+              console.error('Error importing teachers:', err);
+              this.showSnackBar(this.getTranslation('csv_import_failed'));
+            }
+          });
+        } else {
+          this.showSnackBar(this.getTranslation('csv_import_failed'));
         }
-      ];
-
-      // Add imported teachers to the static array
-      this.teachers.push(...importedTeachers);
-      console.log('Imported Teachers:', importedTeachers);
-      console.log('Current Teachers List:', this.teachers);
-
-      this.closeImportModal();
+      };
+      reader.readAsText(this.selectedFile);
     }
   }
 
-  getTranslation(key: string): string {
-    return this.teacherLanguageService.getTranslation(key);
+  private parseCsv(data: string): Teacher[] {
+    const teachers: Teacher[] = [];
+    const rows = data.split('\n').slice(1); // Skip header
+    rows.forEach((row) => {
+      const [
+        teacher_id,
+        first_name,
+        last_name,
+        contact_number,
+        email,
+        address,
+        hire_date,
+        specialization,
+        status
+      ] = row.split(',').map((item) => item.trim());
+      if (first_name && last_name) {
+        teachers.push({
+          teacher_id: teacher_id || '',
+          first_name,
+          last_name,
+          contact_number: contact_number || '',
+          email: email || '',
+          address: address || '',
+          hire_date: hire_date || '',
+          specialization: specialization || '',
+          status: status || 'Active'
+        });
+      }
+    });
+    return teachers;
   }
 }

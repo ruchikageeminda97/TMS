@@ -1,10 +1,11 @@
 export interface Teacher {
-    teacherID:String;
-    firstName: string;
-    lastName: string;
-    gender: string;
-    contactNumber: string;
-    address: string;
-    subject: string;
-    educationLevel: string;
-  }
+  teacher_id: string;
+  first_name: string;
+  last_name: string;
+  contact_number: string;
+  email: string;
+  address: string;
+  hire_date: string;
+  specialization: string;
+  status: string;
+}

@@ -1,5 +1,5 @@
 <div class="login-container">
-  <form class="login-form" (ngSubmit)="onSubmit()">
+  <form class="login-form" (ngSubmit)="onSubmit()" *ngIf="!showRegisterForm">
     <h2 class="login-title">{{ getTranslation("login") }}</h2>
 
     <div class="input-group">
@@ -31,5 +31,68 @@
     <button type="submit" class="login-btn" [disabled]="!username || !password">
       {{ getTranslation("login") }}
     </button>
+
+    <p class="toggle-link">
+      {{ getTranslation("Don't have an accuont ?") }}
+      <a href="javascript:void(0)" (click)="showRegister()">{{ getTranslation("Register") }}</a>
+    </p>
+  </form>
+
+  <form class="login-form" (ngSubmit)="onSubmit()" *ngIf="showRegisterForm">
+    <h2 class="login-title">{{ getTranslation("register") }}</h2>
+
+    <div class="input-group">
+      <label for="regUsername">{{ getTranslation("username") }}</label>
+      <input
+        type="text"
+        id="regUsername"
+        [(ngModel)]="regUsername"
+        name="regUsername"
+        required
+        placeholder="{{ getTranslation('enter_username') }}"
+        class="fade-in"
+      />
+    </div>
+
+    <div class="input-group">
+      <label for="regPassword">{{ getTranslation("password") }}</label>
+      <input
+        type="password"
+        id="regPassword"
+        [(ngModel)]="regPassword"
+        name="regPassword"
+        required
+        placeholder="{{ getTranslation('enter_password') }}"
+        class="fade-in"
+      />
+    </div>
+
+    <div class="input-group">
+      <label for="regEmail">{{ getTranslation("email") }}</label>
+      <input
+        type="email"
+        id="regEmail"
+        [(ngModel)]="regEmail"
+        name="regEmail"
+        required
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+        placeholder="{{ getTranslation('enter_email') }}"
+        class="fade-in"
+      />
+      <div
+        
+        class="text-danger"
+      >
+      </div>
+    </div>
+
+    <button type="submit" class="login-btn" [disabled]="!regUsername || !regPassword || !regEmail ">
+      {{ getTranslation("register") }}
+    </button>
+
+    <p class="toggle-link">
+      {{ getTranslation("Have an account ?") }}
+      <a href="javascript:void(0)" (click)="showLogin()">{{ getTranslation("login") }}</a>
+    </p>
   </form>
 </div>
