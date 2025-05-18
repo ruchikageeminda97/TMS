@@ -27,13 +27,13 @@ export class DashboardComponent implements OnInit {
   ongoingClasses: number = 1;
 
   incomes = [
-    { date: 'Apr 6', income: 8000 },
-    { date: 'Apr 7', income: 7600 },
-    { date: 'Apr 8', income: 6000 },
-    { date: 'Apr 9', income: 18000 },
-    { date: 'Apr 10', income: 12000 },
-    { date: 'Apr 11', income: 9000 },
-    { date: 'Apr 12', income: 12500 }
+      { date: 'May12', income: 0 },
+      { date: 'May13', income: 2400 },
+      { date: 'May14', income: 700 },
+      { date: 'May15', income: 300 },
+      { date: 'May16', income: 1100 },
+      { date: 'May17', income: 1200 },
+      { date: 'May18', income: 500 }
   ];
 
   classes: ClassDisplay[] = [];
@@ -126,13 +126,13 @@ export class DashboardComponent implements OnInit {
 
   updateIncomes() {
     this.incomes = [
-      { date: 'Apr 6', income: 10000 },
-      { date: 'Apr 7', income: 8200 },
-      { date: 'Apr 8', income: 7000 },
-      { date: 'Apr 9', income: 15000 },
-      { date: 'Apr 10', income: 11000 },
-      { date: 'Apr 11', income: 9500 },
-      { date: 'Apr 12', income: 13000 }
+      { date: 'May 12', income: 0 },
+      { date: 'May 13', income: 2400 },
+      { date: 'May 14', income: 700 },
+      { date: 'May 15', income: 300 },
+      { date: 'May 16', income: 1100 },
+      { date: 'May 17', income: 1200 },
+      { date: 'May 18', income: 500 }
     ];
     this.updateYAxis();
   }

@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService } from '../api_services/services';
 import { Student } from '../models/student.model';
-import { Payment } from '../models/payment.model'; 
+import { Payment } from '../models/payment.model';
 import { Observable, of } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
 
@@ -18,9 +18,25 @@ import { map, startWith, tap } from 'rxjs/operators';
 export class PaymentDetailsComponent implements OnInit {
   students: Student[] = [];
   payments: Payment[] = [];
+  studentPayments: Payment[] = []; // Payments for selected student
   searchForm: FormGroup;
   filteredStudents: Observable<Student[]> = of([]);
   selectedStudent: Student | null = null;
+
+  private months = [
+    { value: '01', name: 'January' },
+    { value: '02', name: 'February' },
+    { value: '03', name: 'March' },
+    { value: '04', name: 'April' },
+    { value: '05', name: 'May' },
+    { value: '06', name: 'June' },
+    { value: '07', name: 'July' },
+    { value: '08', name: 'August' },
+    { value: '09', name: 'September' },
+    { value: '10', name: 'October' },
+    { value: '11', name: 'November' },
+    { value: '12', name: 'December' }
+  ];
 
   constructor(
     private apiService: ApiService,
@@ -98,36 +114,29 @@ export class PaymentDetailsComponent implements OnInit {
     return `${student.first_name} ${student.last_name}`;
   }
 
-  onSearch(): void {
-    if (this.searchForm.invalid && !this.selectedStudent) {
-      this.showSnackBar('Please enter or select a student');
-      return;
-    }
-
-    const searchValue = this.searchForm.get('searchInput')?.value;
-    const student = this.selectedStudent || this.students.find(s =>
-      s.first_name.toLowerCase() === searchValue.toLowerCase() ||
-      `${s.first_name} ${s.last_name}`.toLowerCase() === searchValue.toLowerCase()
-    );
-
-    if (student) {
-      console.log('Found student ID:', student.student_id);
-      this.showSnackBar(`Found student: ${this.getStudentName(student)} (ID: ${student.student_id})`);
-    } else {
-      console.log('No student found for search:', searchValue);
-      this.showSnackBar(`No student found for: ${searchValue}`);
-    }
-  }
-
   selectStudent(student: Student): void {
     this.selectedStudent = student;
     this.searchForm.get('searchInput')?.setValue(this.getStudentName(student));
     this.filteredStudents = of([]);
     // Filter and log payments for the selected student
-    const studentPayments = this.payments.filter(payment => 
+    this.studentPayments = this.payments.filter(payment =>
       payment.student_id.toLowerCase() === student.student_id.toLowerCase()
     );
-    console.log(`Payments for ${this.getStudentName(student)} (ID: ${student.student_id}):`, studentPayments);
+    console.log(`Payments for ${this.getStudentName(student)} (ID: ${student.student_id}):`, this.studentPayments);
+    if (this.studentPayments.length > 0) {
+      this.showSnackBar(`Found ${this.studentPayments.length} payment(s) for ${this.getStudentName(student)}`);
+    } else {
+      this.showSnackBar(`No payments found for ${this.getStudentName(student)}`);
+    }
+  }
+
+  getMonthName(month: string): string {
+    const monthObj = this.months.find(m => m.value === month);
+    return monthObj ? monthObj.name : month;
+  }
+
+  formatMonthYear(payment: Payment): string {
+    return `${this.getMonthName(payment.month)} ${payment.year}`;
   }
 
   private showSnackBar(message: string, action: string = 'Close', duration: number = 3000): void {

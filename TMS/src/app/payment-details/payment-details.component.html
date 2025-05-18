@@ -1,7 +1,7 @@
 <div class="content-area">
   <div class="container mt-4">
     <h2 class="text-center animate-title mb-4">Payment Details</h2>
-    <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="p-4 bg-white rounded shadow animate-form">
+    <form [formGroup]="searchForm" class="p-4 bg-white rounded shadow animate-form">
       <div class="row">
         <div class="col-md-6 mb-3 position-relative">
           <label for="searchInput" class="form-label">Search Student by First Name</label>
@@ -36,15 +36,41 @@
           <ng-template #noStudents></ng-template>
         </div>
       </div>
-      <div class="text-center">
-        <button
-          type="submit"
-          class="btn btn-primary animate-button"
-          [disabled]="searchForm.invalid && !selectedStudent"
-        >
-          Search
-        </button>
-      </div>
     </form>
+    <div class="mt-4 p-4 bg-white rounded shadow animate-table" *ngIf="selectedStudent; else noSelection">
+      <h3 class="mb-3">Payments for {{ getStudentName(selectedStudent) }} (ID: {{ selectedStudent.student_id }})</h3>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Payment ID</th>
+              <th scope="col">Class ID</th>
+              <th scope="col">Month/Year</th>
+              <th scope="col">Payment Date</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let payment of studentPayments" class="animate-row">
+              <td>{{ payment.payment_id }}</td>
+               <td>{{ payment.class_id }}</td>
+              <td>{{ formatMonthYear(payment) }}</td>
+              <td>{{ payment.payment_date }}</td>
+              <td>{{ payment.amount }}</td>
+              <td>{{ payment.status }}</td>
+            </tr>
+            <tr *ngIf="studentPayments.length === 0">
+              <td colspan="5" class="text-center">No payments found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <ng-template #noSelection>
+      <div class="mt-4 p-4 bg-white rounded shadow animate-table text-center">
+        <p class="text-muted">Select a student to view payment details</p>
+      </div>
+    </ng-template>
   </div>
 </div>

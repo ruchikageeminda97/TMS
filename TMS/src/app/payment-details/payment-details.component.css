@@ -33,12 +33,17 @@
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   background: #ffffff;
-  height: auto;
-  overflow-y: auto;
   padding: 20px;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
+}
+
+.animate-table {
+  animation: slideInUp 0.8s ease-out;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 @keyframes slideInUp {
@@ -50,16 +55,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-form {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.text-center {
-  margin-top: auto;
 }
 
 .animate-input {
@@ -90,23 +85,78 @@ form {
   }
 }
 
-.animate-button {
-  padding: 10px 20px; /* Smaller than PaymentComponent’s 12px 30px */
-  font-size: 0.95rem; /* Smaller than PaymentComponent’s 1rem */
-  font-weight: 500;
-  background-color: #4a90e2;
-  transition: all 0.3s ease;
+.animate-suggestions {
+  max-height: 200px;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease-in;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.animate-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  background-color: #357abd;
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-.animate-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
+.list-group-item {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: rgba(74, 144, 226, 0.1);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  vertical-align: middle;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(74, 144, 226, 0.05);
+}
+
+.animate-row {
+  animation: fadeInRow 0.5s ease-out;
+}
+
+@keyframes fadeInRow {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.text-muted {
+  color: #666;
 }
 
 @media (max-width: 768px) {
@@ -123,13 +173,18 @@ form {
     font-size: 1.5rem;
   }
 
-  .animate-form {
+  .animate-form,
+  .animate-table {
     padding: 15px;
-    height: 85vh;
   }
 
-  .animate-button {
-    padding: 8px 15px;
+  .table th,
+  .table td {
+    padding: 8px;
     font-size: 0.9rem;
+  }
+
+  .animate-suggestions {
+    max-height: 150px;
   }
 }
